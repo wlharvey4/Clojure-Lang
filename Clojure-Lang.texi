@@ -19,14 +19,12 @@
 @defindex cr   @c chunk reference
 @c *****************************************************************************
 
-
+@c VERSION 0.0.3
+@c DATE    2018-10-28T00:45
 
 @c *****************************************************************************
 @c DOCUMENT VARIABLES
 @c *****************************************************************************
-
-@c VERSION 0.0.2
-@c DATE    2018-10-27T23:50
 
 @c -----------------------------------------------------------------------------
 @set TITLE      Clojure Language Reference
@@ -46,25 +44,13 @@
 @c FINALOUT / DRAFT / FORPRINT
 @c *****************************************************************************
 
+@c -----------------------------------------------------------------------------
 @set      DRAFT @i{DRAFT} @c when set, print DRAFT in heading
 @c @clear DRAFT  @c when clear, don't print DRAFT in heading
 @clear  FINALOUT @c when clear, show black boxes for overfull lines
 @c @set FINALOUT @c when set, don't show black boxes for overfull lines
 @clear  FORPRINT @c when clear, PDF output is for viewing, not printing
 @c @set FORPRINT @c when set, PDF output is for printing, not viewing
-
-@c -----------------------------------------------------------------------------
-@ifclear FORPRINT
-@tex
-\gdef\linkcolor{0.5 0.09 0.12}
-@end tex
-@tex
-\gdef\urlcolor{0.5 0.09 0.12}
-@end tex
-@tex
-\global\urefurlonlylinktrue
-@end tex
-@end ifclear
 
 @iftex
 @ifset FINALOUT @c don't show black boxes for final printout
@@ -80,11 +66,27 @@
 @end ifset
 @end ifset
 
+@ifclear FORPRINT
+@tex
+\gdef\linkcolor{0.5 0.09 0.12}
+@end tex
+@tex
+\gdef\urlcolor{0.5 0.09 0.12}
+@end tex
+@tex
+\global\urefurlonlylinktrue
+@end tex
+@end ifclear
 @c -----------------------------------------------------------------------------
 
 
 
 
+@c *****************************************************************************
+@c SECTIONING
+@c *****************************************************************************
+
+@c -----------------------------------------------------------------------------
 @iftex
 @set DOCUMENT book
 @set CHAPTER chapter
@@ -113,6 +115,7 @@
 @set SECTION section
 @set SUBSECTION subsection
 @end ifdocbook
+@c -----------------------------------------------------------------------------
 
 
 
@@ -121,6 +124,7 @@
 @c SPECIAL TEXIWEBJR COMMANDS
 @c *****************************************************************************
 
+@c -----------------------------------------------------------------------------
 @c Change how xref titles are quoted.
 @tex
 \gdef\xrefprintnodename#1{``#1''}
@@ -136,6 +140,7 @@
 @i{\text\}
 @end macro
 @end ifnottex
+@c -----------------------------------------------------------------------------
 
 
 
@@ -345,7 +350,17 @@ Preface
 Rationale
 
 * Rationale in Detail::
-* CLOJURE Is Dynamic Functional Lisp::
+* Dynamic Functional Lisp::
+* Clojure Features::
+
+Clojure Features
+
+* Dynamic Development::
+* Functional Programming::
+* Lisp::
+* Runtime Polymorphism::
+* Concurrent Programming::
+* Hosted On The JVM::
 
 The Makefile
 
@@ -556,7 +571,8 @@ CLOJURE provides the following features (benefits):
 
 @menu
 * Rationale in Detail::
-* CLOJURE Is Dynamic Functional Lisp::
+* Dynamic Functional Lisp::
+* Clojure Features::
 @end menu
 
 @node Rationale in Detail
@@ -616,7 +632,7 @@ robust --- practical --- fast
 
 @c -----------------------------------------------------------------------------
 
-@node CLOJURE Is Dynamic Functional Lisp
+@node Dynamic Functional Lisp
 @section CLOJURE Is Dynamic Functional Lisp
 
 CLOJURE is  a Lisp  not constrained  by backwards compatibility;  it is  also a
@@ -641,6 +657,204 @@ Heterogeneous collections, return types
 @item
 Dynamic polymorphism
 @end itemize
+
+
+
+
+@c -----------------------------------------------------------------------------
+
+@node Clojure Features,
+@section Clojure Features
+@cindex features
+
+Clojure has a set of useful features that together form a simple, coherent, and
+powerful tool.
+
+
+@c .....................................
+
+@menu
+* Dynamic Development::
+* Functional Programming::
+* Lisp::
+* Runtime Polymorphism::
+* Concurrent Programming::
+* Hosted On The JVM::
+@end menu
+
+@node Dynamic Development
+@subsection Dynamic Development
+@cindex dynamic
+
+First and foremost,  Clojure is dynamic.  That means that  a Clojure program is
+not  just something  you compile  and  run, but  something with  which you  can
+interact.  Almost all  of the language constructs are reified,  and thus can be
+examined and changed.
+
+This  leads to  a substantially  different experience  from running  a program,
+examining its results  (or failures) and trying again.  In  particular, you can
+grow your program, with data loaded,  adding features, fixing bugs, testing, in
+an unbroken stream.
+
+@subheading The REPL
+@cindex REPL
+
+While Clojure  can be embedded  in a Java application,  or used as  a scripting
+language, the primary programming interface is the Read-Eval-Print-Loop (REPL).
+You can  start the  Clojure REPL like  this, and then  follow along  trying the
+samples in this feature tour:
+
+@example
+java -cp clojure.jar clojure.main
+@end example
+
+Clojure has arbitrary precision integers, strings, ratios, doubles, characters,
+symbols, keywords.
+
+@cindex compiler
+@cindex JVM bytecode
+While  Clojure is  a  compiled language,  you don't  ``run''  the compiler  ---
+anything  you enter  into the  REPL or  load using  load-file is  automatically
+compiled to JVM bytecode on the fly.
+
+
+@c .....................................
+
+@node Functional Programming
+@subsection Functional Programming
+@cindex functional
+
+Clojure is  a functional programming language.  It:
+
+@itemize
+@item
+provides the tools to avoid mutable state,
+@item
+provides  functions  as first-class  objects,  and
+@item
+emphasizes recursive iteration instead of side-effect based looping.
+@end itemize
+
+The philosophy  behind Clojure is  that most parts  of most programs  should be
+functional, and that programs that are more functional are more robust.
+
+@subheading First Class Functions
+@cindex @code{fn}
+@cindex @code{defn}
+@cindex macro
+@cindex function object
+
+@code{fn} creates a function object.  It yields  a value like any other --- you
+can store it in a var, pass it to functions etc.
+
+@example
+(def hello (fn [] "Hello world"))
+@end example
+
+@code{defn} is a macro that makes defining functions a little simpler.  Clojure
+supports arity  overloading in  a single  function object,  self-reference, and
+variable-arity functions using @code{&}:
+
+@example
+(defn argcount
+  ([] 0)
+  ([x] 1)
+  ([x y] 2)
+  ([x y & more] (+ (argcount x y) (count more))))
+@end example
+
+@cindex @code{let}
+You can create local names for  values inside a function using @code{let}.  The
+scope of any local names is lexical.
+
+@subheading Immutable Data Structures
+@cindex data structures, immutable
+@cindex immutable data structures
+
+The  easiest   way  to  avoid   mutating  state   is  to  use   immutable  data
+structures.  Clojure provides a set of immutable
+
+@itemize
+@item lists,
+@item vectors,
+@item sets and
+@item maps.
+@end itemize
+
+@cindex persistence
+Since they can’t be changed, 'adding' or 'removing' something from an immutable
+collection means creating a  new collection just like the old  one but with the
+needed  change.  @dfn{Persistence}  is a  term  used to  describe the  property
+wherein  the  old version  of  the  collection  is  still available  after  the
+'change', and that the collection maintains its performance guarantees for most
+operations.   Singly-linked  lists and  trees  are  the basic  functional  data
+structures, to which  Clojure adds a hash  map, set and vector  both based upon
+array mapped hash tries.
+
+@subsubheading Metadata
+@cindex metadata
+
+Applications often need to associate attributes  and other data about data that
+is  orthogonal to  the  logical value  of the  data.   Clojure provides  direct
+support for  this metadata.   Symbols, and  all of  the collections,  support a
+metadata map.   It can be accessed  with the meta function.   Metadata does not
+impact equality semantics, nor will metadata be seen in operations on the value
+of a collection.  Metadata can be read, and can be printed.
+
+@subheading Extensible Abstractions
+@cindex java interfaces
+
+Clojure uses  Java interfaces to define  its core data structures.  This allows
+for extensions of Clojure to  new concrete implementations of these interfaces,
+and  the library  functions will  work  with these  extensions.  This  is a  big
+improvement vs.  hardwiring a language  to the concrete implementations  of its
+data types.
+
+@subsubheading Seq Interface
+@cindex seq interface
+
+A good  example of this  is the  seq interface.  By  making the core  Lisp list
+construct into  an abstraction, a wealth  of library functions are  extended to
+any data  structure that can  provide a  sequential interface to  its contents.
+All of  the Clojure data  structures can provide seqs.   Seqs can be  used like
+iterators or generators.   Seqs are extremely simple,  providing a @code{first}
+function,  which return  the  first item  in the  sequence,  and a  @code{rest}
+function which returns the  rest of the sequence, which is  itself either a seq
+or nil.
+
+@subheading Recursive Looping
+
+In the  absence of mutable local  variables, looping and iteration  must take a
+different form than in languages with built-in for or while constructs that are
+controlled by  changing state.  In  functional languages looping  and iteration
+are replaced/implemented via recursive function calls.
+
+
+@c .....................................
+
+@node Lisp
+@subsection Lisp
+
+
+@c .....................................
+
+@node Runtime Polymorphism
+@subsection Runtime Polymorphism
+
+
+@c .....................................
+
+@node Concurrent Programming
+@subsection Concurrent Programming
+
+
+@c .....................................
+
+@node Hosted On The JVM
+@subsection Hosted On The JVM
+
+
+
 
 
 
