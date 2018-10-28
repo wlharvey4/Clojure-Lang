@@ -17,8 +17,8 @@
 @c DOCUMENT VARIABLES
 @c *****************************************************************************
 
-@c VERSION 0.0.1
-@c DATE    2018-10-27T22:40
+@c VERSION 0.0.2
+@c DATE    2018-10-27T23:50
 
 @c -----------------------------------------------------------------------------
 @set TITLE      Clojure Language Reference
@@ -252,7 +252,7 @@ URL: @url{http://www.example.com/} @*
 
 @c =============================================================================
 @node Top
-@top General Introduction
+@top The CLOJURE Programming Language
 @c =============================================================================
 
 @c Preface node should come right after the Top
@@ -408,10 +408,146 @@ Acknowledgements go here.
 @node Introduction
 @chapter Introduction
 
+CLOJURE's home page is at: @url{https://clojure.org/index}.
+
+The home site describes CLOJURE as:
+
+@quotation
+Clojure is  a robust, practical,  and fast programming  language with a  set of
+useful features that together form a simple, coherent, and powerful tool.
+
+Clojure  is  a dynamic,  general-purpose  programming  language, combining  the
+approachability and  interactive development  of a  scripting language  with an
+efficient and robust infrastructure  for multithreaded programming.  Clojure is
+a compiled language, yet remains completely dynamic –-- every feature supported
+by Clojure is  supported at runtime.  Clojure provides easy  access to the Java
+frameworks, with optional  type hints and type inference, to  ensure that calls
+to Java can avoid reflection.
+
+Clojure is a dialect of Lisp,  and shares with Lisp the code-as-data philosophy
+and a powerful macro system.  Clojure is predominantly a functional programming
+language,   and   features  a   rich   set   of  immutable,   persistent   data
+structures.  When   mutable  state  is   needed,  Clojure  offers   a  software
+transactional  memory  system and  reactive  Agent  system that  ensure  clean,
+correct, multithreaded designs.
+
+@end quotation
+
+@heading Important Ideas
+
+@itemize
+@item Practical
+@item General Purpose
+@item Scripting Language
+@item Multithreaded Programming
+@item Compiled Language
+@item Dynamic Language
+@item Java Frameworks
+@item Type Hints / Type Inference
+@item Dialect of Lisp
+@item Code-As-Data
+@item Macro System
+@item Immutable Data Structure
+@item Transactional Memory System / Reactive Agent System
+@end itemize
+
+@heading Rationale
+
+CLOJURE provides the following features (benefits):
+
+@itemize
+@item it is LISP
+@item it is FUNCTIONAL
+@item symbiotic with the JVM
+@item supports CONCURRENCY
+@end itemize
+
+
+
+@c -----------------------------------------------------------------------------
+
+@node Rationale in Detail
+@section Rationale in Detail
+
+@itemize
+@item Stakeholders want the JVM
+
+Customers and stakeholders have substantial investments in, and are comfortable
+with the  performance, security  and stability of,  industry-standard platforms
+like the JVM.
+
+@item Stakeholders envy dynamic languages
+
+Java developers @dots{} envy the  succinctness, flexibility and productivity of
+dynamic languages;
+
+@item Problems with concurrency
+
+they face  ongoing problems dealing  with concurrency using native  threads and
+locking.
+
+@item Clojure addresses these concerns
+
+Clojure is an effort in pragmatic  dynamic language design in this context.  It
+endeavors to be  a general-purpose language suitable in those  areas where Java
+is  suitable.  It  reflects the  reality that,  for the  concurrent programming
+future, pervasive, unmoderated mutation simply has to go.
+
+@item Clojure runs on the JVM
+
+Clojure meets its  goals by: embracing an industry-standard,  open platform ---
+the JVM;
+
+@item CLOJURE is LISP
+
+modernizes a venerable language - Lisp;
+
+@item uses functional programming and immutable data
+
+fosters  the functional  programming paradigm  with immutable,  persistent data
+structures;
+
+@item has concurrency support
+
+and provides built-in  concurrency support  via software transactional  memory and
+asynchronous agents.
+
+@item CLOJURE IS:
+
+robust --- practical --- fast
+
+@end itemize
 
 
 
 
+@c -----------------------------------------------------------------------------
+
+@node CLOJURE Is Dynamic Functional Lisp
+@section CLOJURE Is Dynamic Functional Lisp
+
+CLOJURE is  a Lisp  not constrained  by backwards compatibility;  it is  also a
+functional language supporting  immutability that is not  constrained by static
+typing or homogeneous collections.
+
+@itemize
+@item
+Extends the code-as-data paradigm to maps and vectors
+@item
+Defaults to immutability
+@item
+Core data structures are extensible abstractions
+@item
+Embraces a platform (JVM)
+@item
+Clojure is a functional language with a dynamic emphasis
+@item
+All data structures immutable & persistent, supporting recursion
+@item
+Heterogeneous collections, return types
+@item
+Dynamic polymorphism
+@end itemize
 
 
 
