@@ -11,8 +11,8 @@
 @c %**end of header (This is for running Texinfo on a region.)
 @c *****************************************************************************
 
-@c VERSION 0.0.3
-@c DATE    2018-10-28T00:45
+@c VERSION 0.0.4
+@c DATE    2018-10-28T1600
 
 @c *****************************************************************************
 @c DOCUMENT VARIABLES
@@ -559,7 +559,7 @@ Dynamic polymorphism
 
 @c -----------------------------------------------------------------------------
 
-@node Clojure Features,
+@node Clojure Features
 @section Clojure Features
 @cindex features
 
@@ -719,8 +719,51 @@ are replaced/implemented via recursive function calls.
 
 @c .....................................
 
-@node Lisp
-@subsection Lisp
+@node Dialect of Lisp
+@subsection Dialect of Lisp
+@cindex dialect of Lisp
+
+Clojure  is a  member of  the  Lisp family  of languages.   Lisp’s approach  to
+code-as-data and its macro system@footnote{The  macro system allows the compile
+to be extended by user code.} still set it apart from other languages.  Clojure
+extends the  code-as-data system beyond parenthesized  lists (s-expressions) to
+vectors and  maps.  Thus  vectors and  maps can  be used  in macro  syntax, have
+literal reader representations etc.
+
+@heading The Reader and Macros
+
+@cindex reader
+Lisp  data, and  thus Lisp  code,  is read  by the  @dfn{reader}.@footnote{Most
+Clojure programs begin life as text files, and  it is the task of the reader to
+parse the text and  produce the data structure the compiler  will see.  This is
+not  merely a  phase of  the  compiler.}  The  result  of reading  is the  data
+structure represented by  the forms.  Clojure can compile  data structures that
+represent code, and as part of that process it looks for calls to macros.  When
+it sees  one, it calls  the macro, passing  the forms themselves  as arguments,
+then uses  the return value of  the macro in  place of the macro  itself.  Thus
+macros are functions that are called at compile time to perform transformations
+of code.
+
+@heading Syntactic Abstractions
+
+Since code is  data, all of the  Clojure library is available to  assist in the
+transformation.  Thus  macros allow  Lisps, and  Clojure, to  support syntactic
+abstraction.  You  use macros  for the  same reasons you  use functions  --- to
+eliminate repetition  in your code.   Macros should be reserved  for situations
+for which functions are insufficient, e.g. when you need to control evaluation,
+generate  identifiers etc.   Many of  the core  constructs of  Clojure are  not
+built-in primitives but macros just like users can define.
+
+@code{and} is a macro:
+
+@example
+(defmacro and
+  ([] true)
+  ([x] x)
+  ([x & rest]
+    `(let [and# ~x]
+       (if and# (and ~@@rest) and#))))
+@end example
 
 
 @c .....................................
@@ -728,17 +771,210 @@ are replaced/implemented via recursive function calls.
 @node Runtime Polymorphism
 @subsection Runtime Polymorphism
 
+Systems  that   utilize  runtime   polymorphism  are   easier  to   change  and
+extend. Clojure supports polymorphism in several ways:
+
+@itemize
+@item @emph{Java Interfaces}.
+Most core infrastructure data structures in the Clojure runtime are defined by
+Java interfaces.
+@item @emph{Proxy}.
+Clojure  supports  the generation  of  implementations  of Java  interfaces  in
+Clojure using proxy
+@item @emph{Multimethods}.
+The  Clojure  language  supports  polymorphism  along  both  class  and  custom
+hierarchies with multimethods.
+@item @emph{Protocols}.
+The Clojure language also supports a faster form of polymorphism with protocols.
+@end itemize
+
+@heading Multimethods
+@cindex multimethods
+
+Clojure  multimethods  are   a  simple  yet  powerful   mechanism  for  runtime
+polymorphism that is free of the trappings of OO, types and inheritance.
+
+@subheading Dispatch
+@cindex dispatch
+@cindex runtime polymorphism
+
+The basic idea behind runtime polymorphism is that a single function designator
+dispatches to  multiple independently-defined  function definitions  based upon
+some  value of  the call.   For traditional  single-dispatch OO  languages that
+value is the type of the 'receiver' or 'this'.
+
+@subheading CLOS Functions
+@cindex CLOS
+@cindex multimethods
+
+CLOS generic  functions extend  dispatch value  to a composite  of the  type or
+value of multiple arguments, and are thus @dfn{multimethods}.
+
+@subheading Arbitrary Function of Arguments
+@cindex implementation inheritance
+
+Clojure multimethods  go further still  to allow the  dispatch value to  be the
+result of  an arbitrary  function of  the arguments.   Clojure does  not support
+implementation inheritance.
+
+@subheading Defining Multimethods
+@cindex multimethods, defining
+@cindex @code{defmulti}
+@cindex @code{defmethod}
+
+Multimethods are  defined using  @code{defmulti}, which takes  the name  of the
+multimethod and the dispatch function.  Methods are independently defined using
+@code{defmethod},  passing the  multimethod name,  the dispatch  value and  the
+function body.
+
+@heading Protocols
+@cindex protocols
+
+Similar to  interfaces, Clojure  protocols define only  function specifications
+(no  implementation)   and  allow   types  to  implement   multiple  protocols.
+Additionally,  protocols are  open to  later dynamic  extension for  new types.
+Protocols are limited just  to dispatch on class type to  take advantage of the
+native Java performance of polymorphic method calls.
+
 
 @c .....................................
 
 @node Concurrent Programming
 @subsection Concurrent Programming
+@cindex concurrent programming
+
+Today’s systems  have to  deal with  many simultaneous  tasks and  leverage the
+power of multi-core  CPUs. Doing so with  threads can be very  difficult due to
+the   complexities  of   synchronization.  Clojure   simplifies  multi-threaded
+programming in several ways.
+
+@enumerate
+@item Immutable Data.
+Because the  core data  structures are  immutable, they  can be  shared readily
+between threads.
+@item State Changes.
+However, it  is often necessary  to have state  change in a  program.  Clojure,
+being a  practical language, allows state  to change but provides  mechanism to
+ensure  that,  when  it  does  so, it  remains  consistent,  while  alleviating
+developers from having to avoid conflicts manually using locks etc.
+@item Software Transactional Memory System
+The software transactional memory  system (STM), exposed through @code{dosync},
+@code{ref},  @code{ref-set}, @code{alter},  et  al,  supports sharing  changing
+state between threads in a synchronous and coordinated manner.
+@item Agent System.
+The  agent  system  supports  sharing  changing state  between  threads  in  an
+asynchronous and independent manner.
+@item Atoms System.
+The  atoms  system  supports  sharing   changing  state  between  threads  in  a
+synchronous and independent manner.
+@item Dynamic Var System.
+The  dynamic var  system, exposed  through @code{def},  @code{binding}, et  al,
+supports isolating changing state within threads.
+@item The Java Thread System.
+IUn all cases, Clojure does not replace the Java thread system; rather it works
+with it.  Clojure functions are @file{java.util.concurrent.Callable}U,
+therefore they work with the @file{Executor} framework etc.
+@item Refs.
+Refs are  mutable references  to objects.   They can be  ref-set or  altered to
+refer  to  different  objects  during  transactions,  which  are  delimited  by
+@code{dosync} blocks.  All ref modifications within a transaction happen or none
+do.
+
+Also, reads  of refs within a  transaction reflect a snapshot  of the reference
+world at  a particular point in  time, i.e.  each transaction  is isolated from
+other  transactions.  If  a conflict  occurs between  2 transactions  trying to
+modify the  same reference, one  of them will be  retried.  All of  this occurs
+without explicit locking.
+@end enumerate
 
 
 @c .....................................
 
 @node Hosted On The JVM
 @subsection Hosted On The JVM
+
+Clojure is designed to  be a hosted language, sharing the  JVM type system, GC,
+threads etc.   It compiles all functions  to JVM bytecode.  Clojure  is a great
+Java library  consumer, offering  the dot-target-member  notation for  calls to
+Java.  Class names  can be referenced in full, or  as non-qualified names after
+being imported.  Clojure supports the dynamic implementation of Java interfaces
+and classes using reify and proxy:
+
+Tapping into a Java class is as easy as:
+
+@example
+(import '[java.time LocalDate])
+
+(defn add-week ^LocalDate [^LocalDate date]
+  (.plusDays date 7))
+
+(defn day->str [^LocalDate date]
+  (format "%s %s, %s" (.getMonth date) (.getDayOfMonth date) (.getYear date)))
+
+;; infinite sequence of weekly dates, starting from today
+(def future-weeks (iterate add-week (LocalDate/now)))
+
+(map day->str (take 4 future-weeks))
+;; ("JULY 24, 2017" "JULY 31, 2017" "AUGUST 7, 2017" "AUGUST 14, 2017")
+@end example
+
+
+
+
+@c -----------------------------------------------------------------------------
+
+@node Other Hosts
+@section Other Hosts
+
+
+@c .....................................
+
+@node ClojureScript
+@subsection ClojureScript
+@cindex clojurescript
+
+@url{https://clojurescript.org/, ClojureScript}
+
+@cindex Google Closure optimizing compiler
+ClojureScript  is a  compiler for  Clojure that  targets JavaScript.   It emits
+JavaScript code which  is compatible with the advanced compilation  mode of the
+Google Closure  optimizing compiler.  ClojureScript  combines the reach  of the
+JavaScript platform,  the flexibility  and interactive development  of Clojure,
+and  the whole-program  optimization  of  Google Closure  to  provide the  most
+powerful language for programming the web.
+
+@heading Why JavaScript?
+
+The spread  of the browser and  web-based applications has given  JavaScript an
+exclusive reach  unmatched by any  other language.  Because of  its importance,
+JavaScript  engines  are also  receiving  extensive  research and  optimization
+allowing  JavaScript to  compete  for performance  with  many more  established
+platforms like the JVM.
+
+@heading Why Google Closure?
+
+As  the  purveyors   of  some  of  the  most   complicated  client-service  web
+applications in use today, Google has  invested heavily in creating the Closure
+library  and  Closure  compiler  which  work together  to  make  whole  program
+optimization possible, yielding  programs that provide minimal  load times even
+when using many libraries.
+
+
+@c .....................................
+
+@node Closure CLR
+@subsection Closure CLR
+
+@url{https://clojure.org/about/clojureclr, ClosureCLR}
+
+@heading About
+
+This  project is  a native  implementation of  Clojure on  the Common  Language
+Runtime (CLR), the execution engine  of Microsoft’s .Net Framework.  ClojureCLR
+is programmed in  C# (and Clojure itself) and makes  use of Microsoft’s Dynamic
+Language Runtime (DLR).
+
+
 
 
 
@@ -747,8 +983,8 @@ are replaced/implemented via recursive function calls.
 
 @c *****************************************************************************
 
-@node First chapter
-@chapter First Chapter Title
+@node Getting Started
+@chapter Getting Started
 
 
 
