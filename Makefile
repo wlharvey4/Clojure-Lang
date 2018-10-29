@@ -10,7 +10,7 @@ SHELL := /bin/bash
 # DEFAULT Target
 ################
 .PHONY : TWJR TANGLE WEAVE TEXI INFO PDF HTML
-.PHONY : default twjr tangle weave texi info pdf html
+.PHONY : default twjr tangle jrtangle weave texi info pdf html
 default : INFO PDF HTML
 
 # TWJR TARGETS
@@ -19,7 +19,8 @@ TWJR : twjr
 twjr : distclean tangle weave
 
 TANGLE : tangle
-tangle : $(FILE).twjr
+tangle : jrtangle
+jrtangle : 
 	jrtangle $(FILE).twjr
 
 WEAVE : weave
@@ -73,5 +74,19 @@ distclean : dirclean
 # after distclean, remove INFO
 worldclean : distclean
 	rm -rfv $(FILE).info*
+
+# HELLO WORLD
+#############
+.PHONY: hello hello-world hello-main
+
+clj/hello-world/src/hello.clj :
+	jrtangle $(FILE).twjr
+
+hello : hello-world
+hello-world : hello-main
+hello-main : clj/hello-world/src/hello.clj
+	cd clj/hello-world && clj -m hello
+
+
 
 
