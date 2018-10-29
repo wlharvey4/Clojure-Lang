@@ -19,8 +19,8 @@
 @defindex cr   @c chunk reference
 @c *****************************************************************************
 
-@c VERSION 0.0.5
-@c DATE    2018-10-28T18:00
+@c VERSION 0.0.6
+@c DATE    2018-10-29T08:45
 
 @c *****************************************************************************
 @c DOCUMENT VARIABLES
@@ -317,6 +317,12 @@ URL: @url{http://www.example.com/} @*
 This  file documents  the programming  language CLOJURE,  and provides  example
 source code that can be extracted and run.
 
+@quotation
+clojure: warning: Your terminal 'dumb' is not fully functional, expect some
+problems.
+@end quotation
+
+
 @insertcopying
 @end ifnotxml
 @end ifnotdocbook
@@ -327,9 +333,85 @@ source code that can be extracted and run.
 
 @c =============================================================================
 @menu
+* Preface::
+* Introduction::
+* Getting Started::
+* First appendix::
+* The Makefile::
+* Code Chunk Summaries::
+* Bibliography::
+* List of Tables::
+* Concept Index::
+
 @detailmenu
+ --- The Detailed Node Listing ---
+
+Preface
+
+* Audience::                    Who should read this @value{DOCUMENT}.
+* Overview::                    An overview of the @value{DOCUMENT}.
+* Conventions::                 Typographical conventions.
+* Acknowledgements::            Acknowledgements.
+
+Rationale
+
+* Rationale in Detail::
+* Dynamic Functional Lisp::
+* Clojure Features::
+* Other Hosts::
+
+Clojure Features
+
+* Dynamic Development::
+* Functional Programming::
+* Dialect of Lisp::
+* Runtime Polymorphism::
+* Concurrent Programming::
+* Hosted On The JVM::
+
+Other Hosts
+
+* ClojureScript::
+* Closure CLR::
+
+Getting Started
+
+* CLI Guide::
+
+CLI Guide
+
+* Installing CLI Tools::
+* Build Tools::
+* Run a REPL::
+* Working With Deps::
+* Write A Program With Deps::
+* Using Local Libraries::
+
+Run Hello World
+
+* Makefile Target for Hello World::
+
+@file{hello-time__hello.clj}
+
+* Makefile Hello Time Target::
+
+The Makefile
+
+* Makefile Variable Definitions::
+* Makefile Default Target::
+* Makefile TWJR Targets::
+* Makefile Clean Targets::
+* Makefile Example Targets::
+
+Code Chunk Summaries
+
+* File Definitions::            Source files by definition.
+* Code Chunk Definitions::      Code chunks by definition.
+* Code Chunk References::       Code chunks by reference.
+
 @end detailmenu
 @end menu
+
 @c =============================================================================
 
 
@@ -521,6 +603,13 @@ CLOJURE provides the following features (benefits):
 
 @c -----------------------------------------------------------------------------
 
+@menu
+* Rationale in Detail::
+* Dynamic Functional Lisp::
+* Clojure Features::
+* Other Hosts::
+@end menu
+
 @node Rationale in Detail
 @section Rationale in Detail
 
@@ -618,6 +707,15 @@ powerful tool.
 
 
 @c .....................................
+
+@menu
+* Dynamic Development::
+* Functional Programming::
+* Dialect of Lisp::
+* Runtime Polymorphism::
+* Concurrent Programming::
+* Hosted On The JVM::
+@end menu
 
 @node Dynamic Development
 @subsection Dynamic Development
@@ -979,6 +1077,11 @@ Tapping into a Java class is as easy as:
 
 @c .....................................
 
+@menu
+* ClojureScript::
+* Closure CLR::
+@end menu
+
 @node ClojureScript
 @subsection ClojureScript
 @cindex clojurescript
@@ -1039,15 +1142,51 @@ Language Runtime (DLR).
 
 
 
+
 @c -----------------------------------------------------------------------------
 
-@node Clojure On The Command Line
-@section Clojure On The Command Line
-@cindex command line tools
-@cindex cli tools
+@menu
+* CLI Guide::
+@end menu
+
+@node CLI Guide
+@section CLI Guide
+@cindex CLI Guide
 
 Clojure provides command line  tools that can be used to  start a Clojure repl,
 use Clojure and Java libraries, and start Clojure programs.
+
+@itemize
+@item
+Running an interactive REPL (Read-Eval-Print Loop)
+@item
+Running Clojure programs
+@item
+Evaluating Clojure expressions
+@item
+using Clojure and Java libraries
+@end itemize
+
+
+@c .....................................
+
+
+@menu
+* Installing CLI Tools::
+* Build Tools::
+* Run a REPL::
+* Working With Deps::
+* Write A Program With Deps::
+* Using Local Libraries::
+@end menu
+
+@node Installing CLI Tools
+@subsection Installing CLI Tools
+@cindex install cli tools
+@cindex command line tools
+@cindex cli tools
+
+@heading Initial Self-Configuration
 
 After  installing Clojure  via  HomeBrew,  the first  time  I  ran the  command
 @command{clojure} from Bash prompt, this occurred:
@@ -1066,7 +1205,12 @@ Clojure 1.9.0
 user=>
 @end example
 
-@heading Build Tools
+
+@c .....................................
+
+@node Build Tools
+@subsection Build Tools
+@cindex build tools
 
 Build  tools  provide  a  range  of capabilities  for  building,  running,  and
 deploying  Clojure libraries  and applications.  The two  most popular  Clojure
@@ -1076,58 +1220,6 @@ build tools are
 @item @url{https://leiningen.org/, Leiningen}
 @item @url{http://boot-clj.com/, Boot}
 @end itemize
-
-
-
-@c -----------------------------------------------------------------------------
-
-@node CLI Guide
-@section CLI Guide
-@cindex CLI Guide
-
-Clojure provides command line tools for:
-
-@itemize
-@item
-Running an interactive REPL (Read-Eval-Print Loop)
-@item
-Running Clojure programs
-@item
-Evaluating Clojure expressions
-@end itemize
-
-@heading Using Other Libraries
-@cindex libraries, using
-@cindex dependencies
-@cindex deps
-@cindex Java libraries
-@cindex Maven ecosytem
-@cindex Maven Central
-@cindex Clojars
-
-In  all the  above scenarios  you  might want  to  use other  Clojure and  Java
-libraries (dependencies  or 'deps').   These may be  libraries you  are writing
-locally, projects in git (e.g. on  GitHub) or, commonly, libraries available in
-the Maven  ecosystem and hosted by  central repositories like Maven  Central or
-Clojars.
-
-In all cases, using a library involves:
-@cindex how to use a library
-
-@enumerate a
-@item
-specifying which library you want to  use, providing its name and other aspects
-like version (using a @file{deps.edn} file)
-@item
-getting it (once) from the git or maven repositories to your local machine
-@item
-making it available on the JVM classpath so Clojure can find it while your REPL
-or program is running
-@end enumerate
-
-@cindex @file{deps.edn}
-Clojure tools specify a syntax and  file (@file{deps.edn}) for (a), given which
-they’ll handle (b) and (c) automatically.
 
 
 @c .....................................
@@ -1154,6 +1246,45 @@ user=>
 Once in the REPL  you can type Clojure expressions and  press enter to evaluate
 them.
 
+
+@c .....................................
+
+@node Working With Deps
+@subsection Working With Dependencies (Deps)
+@cindex deps
+@cindex dependencies
+@cindex library
+@cindex libraries, using
+@cindex Java libraries
+@cindex Maven ecosytem
+@cindex Maven Central
+@cindex program, run
+@cindex Clojars
+
+In  all the  above scenarios  you  might want  to  use other  Clojure and  Java
+libraries (@dfn{dependencies} or  @dfn{deps}).  These may be  libraries you are
+writing  locally, projects  in git  (e.g.  on GitHub)  or, commonly,  libraries
+available in the Maven ecosystem and  hosted by central repositories like Maven
+Central or Clojars.
+
+In all cases, using a library involves:
+@cindex how to use a library
+
+@enumerate a
+@item
+specifying which library you want to  use, providing its name and other aspects
+like version (using a @file{deps.edn} file)
+@item
+getting it (once) from the git or maven repositories to your local machine
+@item
+making it available on the JVM classpath so Clojure can find it while your REPL
+or program is running
+@end enumerate
+
+@cindex @file{deps.edn}
+Clojure tools specify a syntax and  file (@file{deps.edn}) for (a), given which
+they’ll handle (b) and (c) automatically.
+
 @heading Using A Clojure Or Java Library
 
 There are  many Clojure  and Java  libraries available  that provide  access to
@@ -1164,9 +1295,9 @@ commonly used Clojure library @file{clj-time} for working with dates and times.
 @cindex dependencies, declaring
 
 To work with this  library, you need to declare it as a  dependency so the tool
-can ensure it has  been downloaded and add it to the  classpath.  The readme in
-most   projects  shows   the  name   and  version,   such  as   @code{[clj-time
-"0.14.2"]}.  Create a @file{deps.edn} file to declare the dependency:
+can ensure it  has been downloaded and  added to the classpath.   The readme in
+most projects shows  the name and version, such  as @code{[clj-time "0.14.2"]}.
+Create a @file{deps.edn} file to declare the dependency:
 
 @subsubheading @file{deps.edn}
 @cindex @file{deps.edn}
@@ -1197,12 +1328,14 @@ and explore Clojure or Java libraries.
 
 @c .....................................
 
-@node Write A Program
-@subsection Write A Program
+@node Write A Program With Deps
+@subsection Write A Program Using A Dependency
+@cindex deps
+@cindex @file{deps.edn}
 @cindex write program
 @cindex program, write
 
-@heading Hello World
+@heading How To Create Hello World
 
 Create a directory  @file{hello-world} and change to that  directory.  Copy the
 @file{deps.edn} file into  this directory.  By default,  the @command{clj} tool
@@ -1213,10 +1346,10 @@ will  look  for  source  files  in the  @file{src}  directory,  so  create  the
 @subheading @file{deps.edn} for Hello World
 
 @need 400
-@anchor{deps-edn}
-@cdindex @r{@{@file{deps.edn}@}}, definition
+@anchor{hello-world--deps-edn}
+@cdindex @r{@{@file{hello-world__deps.edn}@}}, definition
 @noindent
-@r{@{@file{deps.edn}@}} @equiv{}
+@r{@{@file{hello-world__deps.edn}@}} @equiv{}
 @example
 @{:deps
   @{clj-time @{:mvn/version "0.4.2"@}@}@}
@@ -1230,14 +1363,14 @@ will  look  for  source  files  in the  @file{src}  directory,  so  create  the
 
 
 
-@subheading @file{hello.clj}
+@subheading @file{src/hello.clj}
 
 
 @need 400
-@anchor{hello-clj}
-@cdindex @r{@{@file{hello.clj}@}}, definition
+@anchor{hello-world--hello-clj}
+@cdindex @r{@{@file{hello-world__hello.clj}@}}, definition
 @noindent
-@r{@{@file{hello.clj}@}} @equiv{}
+@r{@{@file{hello-world__hello.clj}@}} @equiv{}
 @example
 (ns hello
   (:require [clj-time.core :as t]
@@ -1274,57 +1407,31 @@ Hello world, the time is 02:04 PM
 @end example
 
 This  program can  be invoked  from the  command line  or via  a @command{make}
-target @code{hello} or @code{hello-main}.
+target @code{hello-world}.
 
 @c _____________________________________
+
+@menu
+* Makefile Target for Hello World::
+@end menu
 
 @node Makefile Target for Hello World
 @appendixsubsubsec Makefile Target for Hello World
 
 @need 400
 @anchor{Makefile---Example-Targets-1}
-@crindex @r{<@i{Makefile---Example Targets--Hello World}>}, use
 @cdindex @r{<@i{Makefile---Example Targets}>}, definition
 @noindent
 @r{<@i{Makefile---Example Targets}>} @equiv{}
 @example
-@r{<@i{Makefile---Example Targets--Hello World}>}
-
-@end example
-@iftex
-@smallfonts @rm
-@end iftex
-
-@noindent
-This chunk is also defined in
-@ref{Makefile---Example-Targets-2}.
-
-@noindent
-This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @ref{Makefile}.
-
-@noindent
-The called chunk @r{<@i{Makefile---Example Targets--Hello World}>} is first defined at
-@ref{Makefile---Example-Targets--Hello-World}.
-@iftex
-@textfonts @rm
-@end iftex
-
-@need 400
-@anchor{Makefile---Example-Targets--Hello-World}
-@cdindex @r{<@i{Makefile---Example Targets--Hello World}>}, definition
-@noindent
-@r{<@i{Makefile---Example Targets--Hello World}>} @equiv{}
-@example
 # HELLO WORLD
 #############
-.PHONY: hello hello-world hello-main
+.PHONY: hello-world
 
-clj/hello-world/src/hello.clj :
+clj/hello-world/src/hello.clj : $(FILE).twjr
     jrtangle $(FILE).twjr
 
-hello : hello-world
-hello-world : hello-main
-hello-main : clj/hello-world/src/hello.clj
+hello-world : clj/hello-world/src/hello.clj
     cd clj/hello-world && clj -m hello
 
 @end example
@@ -1333,13 +1440,191 @@ hello-main : clj/hello-world/src/hello.clj
 @end iftex
 
 @noindent
-This chunk is called by @r{<@i{Makefile---Example Targets}>}; see its first definition at @ref{Makefile---Example-Targets-1}.
+This chunk is also defined in
+@ref{Makefile---Example-Targets-2}, and
+@ref{Makefile---Example-Targets-3}.
+
+@noindent
+This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @ref{Makefile}.
 @iftex
 @textfonts @rm
 @end iftex
 
 
+@c .....................................
 
+@node Using Local Libraries
+@subsection Using Local Libraries
+@cindex local libraries
+@cindex local coordinates
+
+You can move part  of this application into a library on  your local disk.  The
+@command{clj} tool uses  local coordinates to support projects  that exist only
+on your local disk.  Extract the  @file{clj-time} parts of this application out
+into a library in a parallel directory @file{time-lib}.
+
+@example
+├── time-lib
+│   ├── deps.edn
+│   └── src
+│       └── hello_time.clj
+└── hello-time
+    ├── deps.edn
+    └── src
+        └── hello.clj
+@end example
+
+@heading Library File @file{time-lib/src/hello_time.clj}
+
+Under @file{time-lib}, use a copy of the @file{deps.edn} file you already have,
+and create a file @file{src/hello_time.clj}:
+
+@need 400
+@anchor{time-lib--deps-edn}
+@cdindex @r{@{@file{time-lib__deps.edn}@}}, definition
+@noindent
+@r{@{@file{time-lib__deps.edn}@}} @equiv{}
+@example
+@{:deps
+  @{clj-time @{:mvn/version "0.4.2"@}@}@}
+
+@end example
+@iftex
+@smallfonts @rm
+@end iftex
+@iftex
+@textfonts @rm
+@end iftex
+
+
+@need 400
+@anchor{time-lib--hello-time-clj}
+@cdindex @r{@{@file{time-lib__hello_time.clj}@}}, definition
+@noindent
+@r{@{@file{time-lib__hello_time.clj}@}} @equiv{}
+@example
+(ns hello-time
+  (:require [clj-time.core :as t]
+            [clj-time.format :as f]))
+
+(defn now
+  "Returns the current datetime"
+  []
+  (t/now))
+
+(defn time-str
+  "Returns a string representation of a datetime in the local time zone."
+  [dt]
+  (f/unparse
+    (f/with-zone (f/formatter "hh:mm aa") (t/default-time-zone))
+    dt))
+
+@end example
+@iftex
+@smallfonts @rm
+@end iftex
+@iftex
+@textfonts @rm
+@end iftex
+
+
+@heading @file{hello-time__hello.clj}
+
+Update the  application at @file{hello-world/src/hello.clj} to  use your library
+instead (place the updated program in @file{hello-time/src}:
+
+@need 400
+@anchor{hello-time--hello-clj}
+@cdindex @r{@{@file{hello-time__hello.clj}@}}, definition
+@noindent
+@r{@{@file{hello-time__hello.clj}@}} @equiv{}
+@example
+(ns hello
+  (:require [hello-time :as ht]))
+
+(defn -main []
+  (println "Hello Time, the world is" (ht/time-str (ht/now))))
+
+@end example
+@iftex
+@smallfonts @rm
+@end iftex
+@iftex
+@textfonts @rm
+@end iftex
+
+
+Modify @file{hello-world/deps.edn} to use a local coordinate that refers to the
+root directory of the @file{time-lib} library (make sure to update the path for
+your machine):
+
+@need 400
+@anchor{hello-time--deps-edn}
+@cdindex @r{@{@file{hello-time__deps.edn}@}}, definition
+@noindent
+@r{@{@file{hello-time__deps.edn}@}} @equiv{}
+@example
+@{:deps
+ @{time-lib @{:local/root "../time-lib"@}@}@}
+
+@end example
+@iftex
+@smallfonts @rm
+@end iftex
+@iftex
+@textfonts @rm
+@end iftex
+
+
+You can  then test  everything from  the hello-world  directory by  running the
+application:
+
+@example
+$ clj -m hello
+Hello world, the time is 02:07 PM
+@end example
+
+@c _____________________________________
+
+@menu
+* Makefile Hello Time Target::
+@end menu
+
+@node Makefile Hello Time Target
+@appendixsubsubsec Makefile Hello Time Target
+
+@need 400
+@anchor{Makefile---Example-Targets-2}
+@cdindex @r{<@i{Makefile---Example Targets}>}, definition
+@noindent
+@r{<@i{Makefile---Example Targets}>} +@equiv{}
+@example
+# HELLO TIME
+############
+
+.PHONY : hello-time
+
+hello-time : clj/hello-time/src/hello.clj
+    cd clj/hello-time && clj -m hello
+
+clj/hello-time/src/hello.clj : $(FILE).twjr
+    jrtangle $(FILE).twjr
+
+@end example
+@iftex
+@smallfonts @rm
+@end iftex
+
+@noindent
+This chunk is also defined in
+@ref{Makefile---Example-Targets-1}, and
+@ref{Makefile---Example-Targets-3}.
+
+@noindent
+This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @ref{Makefile}.
+@iftex
+@textfonts @rm
+@end iftex
 
 
 
@@ -1416,6 +1701,14 @@ The following table lists called chunk definition points.
 
 
 @c -----------------------------------------------------------------------------
+
+@menu
+* Makefile Variable Definitions::
+* Makefile Default Target::
+* Makefile TWJR Targets::
+* Makefile Clean Targets::
+* Makefile Example Targets::
+@end menu
 
 @node Makefile Variable Definitions
 @appendixsec Makefile Variable Definitions
@@ -1641,7 +1934,7 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 @cindex makefile example targets
 
 @need 400
-@anchor{Makefile---Example-Targets-2}
+@anchor{Makefile---Example-Targets-3}
 @cdindex @r{<@i{Makefile---Example Targets}>}, definition
 @noindent
 @r{<@i{Makefile---Example Targets}>} +@equiv{}
@@ -1654,7 +1947,8 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @noindent
 This chunk is also defined in
-@ref{Makefile---Example-Targets-1}.
+@ref{Makefile---Example-Targets-1}, and
+@ref{Makefile---Example-Targets-2}.
 
 @noindent
 This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @ref{Makefile}.
@@ -1678,9 +1972,9 @@ all the file definitions, the code chunk definitions,
 and the code chunk references.
 
 @menu
-* File Definitions::          Source files by definition.
-* Code Chunk Definitions::    Code chunks by definition.
-* Code Chunk References::     Code chunks by reference.
+* File Definitions::            Source files by definition.
+* Code Chunk Definitions::      Code chunks by definition.
+* Code Chunk References::       Code chunks by reference.
 @end menu
 
 
@@ -1694,12 +1988,24 @@ and the code chunk references.
 @item @r{@{@file{Makefile}@}}
 This chunk is defined in
 @ref{Makefile}.
-@item @r{@{@file{deps.edn}@}}
+@item @r{@{@file{hello-time__deps.edn}@}}
 This chunk is defined in
-@ref{deps-edn}.
-@item @r{@{@file{hello.clj}@}}
+@ref{hello-time--deps-edn}.
+@item @r{@{@file{hello-time__hello.clj}@}}
 This chunk is defined in
-@ref{hello-clj}.
+@ref{hello-time--hello-clj}.
+@item @r{@{@file{hello-world__deps.edn}@}}
+This chunk is defined in
+@ref{hello-world--deps-edn}.
+@item @r{@{@file{hello-world__hello.clj}@}}
+This chunk is defined in
+@ref{hello-world--hello-clj}.
+@item @r{@{@file{time-lib__deps.edn}@}}
+This chunk is defined in
+@ref{time-lib--deps-edn}.
+@item @r{@{@file{time-lib__hello_time.clj}@}}
+This chunk is defined in
+@ref{time-lib--hello-time-clj}.
 @end table
 
 
@@ -1719,12 +2025,10 @@ This chunk is defined in
 @item @r{<@i{Makefile---Example Targets}>}
 Multiple definitions occur in
 @ref{Makefile---Example-Targets-1},
+@ref{Makefile---Example-Targets-2},
 and
-@ref{Makefile---Example-Targets-2}.
+@ref{Makefile---Example-Targets-3}.
 
-@item @r{<@i{Makefile---Example Targets--Hello World}>}
-This chunk is defined in
-@ref{Makefile---Example-Targets--Hello-World}.
 @item @r{<@i{Makefile---TWJR Targets}>}
 This chunk is defined in
 @ref{Makefile---TWJR-Targets}.
@@ -1753,10 +2057,6 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @noindent
 This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @ref{Makefile}.
-@item @r{<@i{Makefile---Example Targets--Hello World}>}
-
-@noindent
-This chunk is called by @r{<@i{Makefile---Example Targets}>}; see its first definition at @ref{Makefile---Example-Targets-1}.
 @item @r{<@i{Makefile---TWJR Targets}>}
 
 @noindent

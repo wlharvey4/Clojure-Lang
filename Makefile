@@ -77,16 +77,24 @@ worldclean : distclean
 
 # HELLO WORLD
 #############
-.PHONY: hello hello-world hello-main
+.PHONY: hello-world
 
-clj/hello-world/src/hello.clj :
+clj/hello-world/src/hello.clj : $(FILE).twjr
 	jrtangle $(FILE).twjr
 
-hello : hello-world
-hello-world : hello-main
-hello-main : clj/hello-world/src/hello.clj
+hello-world : clj/hello-world/src/hello.clj
 	cd clj/hello-world && clj -m hello
 
+# HELLO TIME
+############
+
+.PHONY : hello-time
+
+hello-time : clj/hello-time/src/hello.clj
+	cd clj/hello-time && clj -m hello
+
+clj/hello-time/src/hello.clj : $(FILE).twjr
+	jrtangle $(FILE).twjr
 
 
 

@@ -11,8 +11,8 @@
 @c %**end of header (This is for running Texinfo on a region.)
 @c *****************************************************************************
 
-@c VERSION 0.0.5
-@c DATE    2018-10-28T18:00
+@c VERSION 0.0.6
+@c DATE    2018-10-29T08:45
 
 @c *****************************************************************************
 @c DOCUMENT VARIABLES
@@ -266,6 +266,12 @@ URL: @url{http://www.example.com/} @*
 
 This  file documents  the programming  language CLOJURE,  and provides  example
 source code that can be extracted and run.
+
+@quotation
+clojure: warning: Your terminal 'dumb' is not fully functional, expect some
+problems.
+@end quotation
+
 
 @insertcopying
 @end ifnotxml
@@ -989,15 +995,38 @@ Language Runtime (DLR).
 
 
 
+
 @c -----------------------------------------------------------------------------
 
-@node Clojure On The Command Line
-@section Clojure On The Command Line
-@cindex command line tools
-@cindex cli tools
+@node CLI Guide
+@section CLI Guide
+@cindex CLI Guide
 
 Clojure provides command line  tools that can be used to  start a Clojure repl,
 use Clojure and Java libraries, and start Clojure programs.
+
+@itemize
+@item
+Running an interactive REPL (Read-Eval-Print Loop)
+@item
+Running Clojure programs
+@item
+Evaluating Clojure expressions
+@item
+using Clojure and Java libraries
+@end itemize
+
+
+@c .....................................
+
+
+@node Installing CLI Tools
+@subsection Installing CLI Tools
+@cindex install cli tools
+@cindex command line tools
+@cindex cli tools
+
+@heading Initial Self-Configuration
 
 After  installing Clojure  via  HomeBrew,  the first  time  I  ran the  command
 @command{clojure} from Bash prompt, this occurred:
@@ -1016,7 +1045,12 @@ Clojure 1.9.0
 user=>
 @end example
 
-@heading Build Tools
+
+@c .....................................
+
+@node Build Tools
+@subsection Build Tools
+@cindex build tools
 
 Build  tools  provide  a  range  of capabilities  for  building,  running,  and
 deploying  Clojure libraries  and applications.  The two  most popular  Clojure
@@ -1026,58 +1060,6 @@ build tools are
 @item @url{https://leiningen.org/, Leiningen}
 @item @url{http://boot-clj.com/, Boot}
 @end itemize
-
-
-
-@c -----------------------------------------------------------------------------
-
-@node CLI Guide
-@section CLI Guide
-@cindex CLI Guide
-
-Clojure provides command line tools for:
-
-@itemize
-@item
-Running an interactive REPL (Read-Eval-Print Loop)
-@item
-Running Clojure programs
-@item
-Evaluating Clojure expressions
-@end itemize
-
-@heading Using Other Libraries
-@cindex libraries, using
-@cindex dependencies
-@cindex deps
-@cindex Java libraries
-@cindex Maven ecosytem
-@cindex Maven Central
-@cindex Clojars
-
-In  all the  above scenarios  you  might want  to  use other  Clojure and  Java
-libraries (dependencies  or 'deps').   These may be  libraries you  are writing
-locally, projects in git (e.g. on  GitHub) or, commonly, libraries available in
-the Maven  ecosystem and hosted by  central repositories like Maven  Central or
-Clojars.
-
-In all cases, using a library involves:
-@cindex how to use a library
-
-@enumerate a
-@item
-specifying which library you want to  use, providing its name and other aspects
-like version (using a @file{deps.edn} file)
-@item
-getting it (once) from the git or maven repositories to your local machine
-@item
-making it available on the JVM classpath so Clojure can find it while your REPL
-or program is running
-@end enumerate
-
-@cindex @file{deps.edn}
-Clojure tools specify a syntax and  file (@file{deps.edn}) for (a), given which
-they’ll handle (b) and (c) automatically.
 
 
 @c .....................................
@@ -1104,6 +1086,45 @@ user=>
 Once in the REPL  you can type Clojure expressions and  press enter to evaluate
 them.
 
+
+@c .....................................
+
+@node Working With Deps
+@subsection Working With Dependencies (Deps)
+@cindex deps
+@cindex dependencies
+@cindex library
+@cindex libraries, using
+@cindex Java libraries
+@cindex Maven ecosytem
+@cindex Maven Central
+@cindex program, run
+@cindex Clojars
+
+In  all the  above scenarios  you  might want  to  use other  Clojure and  Java
+libraries (@dfn{dependencies} or  @dfn{deps}).  These may be  libraries you are
+writing  locally, projects  in git  (e.g.  on GitHub)  or, commonly,  libraries
+available in the Maven ecosystem and  hosted by central repositories like Maven
+Central or Clojars.
+
+In all cases, using a library involves:
+@cindex how to use a library
+
+@enumerate a
+@item
+specifying which library you want to  use, providing its name and other aspects
+like version (using a @file{deps.edn} file)
+@item
+getting it (once) from the git or maven repositories to your local machine
+@item
+making it available on the JVM classpath so Clojure can find it while your REPL
+or program is running
+@end enumerate
+
+@cindex @file{deps.edn}
+Clojure tools specify a syntax and  file (@file{deps.edn}) for (a), given which
+they’ll handle (b) and (c) automatically.
+
 @heading Using A Clojure Or Java Library
 
 There are  many Clojure  and Java  libraries available  that provide  access to
@@ -1114,9 +1135,9 @@ commonly used Clojure library @file{clj-time} for working with dates and times.
 @cindex dependencies, declaring
 
 To work with this  library, you need to declare it as a  dependency so the tool
-can ensure it has  been downloaded and add it to the  classpath.  The readme in
-most   projects  shows   the  name   and  version,   such  as   @code{[clj-time
-"0.14.2"]}.  Create a @file{deps.edn} file to declare the dependency:
+can ensure it  has been downloaded and  added to the classpath.   The readme in
+most projects shows  the name and version, such  as @code{[clj-time "0.14.2"]}.
+Create a @file{deps.edn} file to declare the dependency:
 
 @subsubheading @file{deps.edn}
 @cindex @file{deps.edn}
@@ -1147,12 +1168,14 @@ and explore Clojure or Java libraries.
 
 @c .....................................
 
-@node Write A Program
-@subsection Write A Program
+@node Write A Program With Deps
+@subsection Write A Program Using A Dependency
+@cindex deps
+@cindex @file{deps.edn}
 @cindex write program
 @cindex program, write
 
-@heading Hello World
+@heading How To Create Hello World
 
 Create a directory  @file{hello-world} and change to that  directory.  Copy the
 @file{deps.edn} file into  this directory.  By default,  the @command{clj} tool
@@ -1165,7 +1188,7 @@ mkdir -p clj
 
 @subheading @file{deps.edn} for Hello World
 
-@(deps.edn@)=
+@(hello-world__deps.edn@)=
 {:deps
   {clj-time {:mvn/version "0.4.2"}}}
 @
@@ -1174,15 +1197,17 @@ mkdir -p clj
 mkdir -p clj/hello-world
 @end initial_setup
 
-@post_create deps.edn mv deps.edn clj/hello-world
+@post_create hello-world__deps.edn mv hello-world__deps.edn clj/hello-world/deps.edn
 
-@subheading @file{hello.clj}
+@subheading @file{src/hello.clj}
 
 @initial_setup
 mkdir -p clj/hello-world/src
+mkdir -p clj/time-lib/src/
+mkdir -p clj/hello-time/src
 @end initial_setup
 
-@(hello.clj@)=
+@(hello-world__hello.clj@)=
 (ns hello
   (:require [clj-time.core :as t]
             [clj-time.format :as f]))
@@ -1199,7 +1224,7 @@ mkdir -p clj/hello-world/src
 
 @
 
-@post_create hello.clj mv hello.clj clj/hello-world/src
+@post_create hello-world__hello.clj mv hello-world__hello.clj clj/hello-world/src/hello.clj
 
 @subheading Run Hello World
 
@@ -1213,7 +1238,7 @@ Hello world, the time is 02:04 PM
 @end example
 
 This  program can  be invoked  from the  command line  or via  a @command{make}
-target @code{hello} or @code{hello-main}.
+target @code{hello-world}.
 
 @c _____________________________________
 
@@ -1221,27 +1246,130 @@ target @code{hello} or @code{hello-main}.
 @appendixsubsubsec Makefile Target for Hello World
 
 @<Makefile---Example Targets@>=
-@<Makefile---Example Targets--Hello World@>
-
-@
-
-@<Makefile---Example Targets--Hello World@>=
 # HELLO WORLD
 #############
-.PHONY: hello hello-world hello-main
+.PHONY: hello-world
 
-clj/hello-world/src/hello.clj :
+clj/hello-world/src/hello.clj : $(FILE).twjr
 	jrtangle $(FILE).twjr
 
-hello : hello-world
-hello-world : hello-main
-hello-main : clj/hello-world/src/hello.clj
+hello-world : clj/hello-world/src/hello.clj
 	cd clj/hello-world && clj -m hello
 
 @
 
 
+@c .....................................
 
+@node Using Local Libraries
+@subsection Using Local Libraries
+@cindex local libraries
+@cindex local coordinates
+
+You can move part  of this application into a library on  your local disk.  The
+@command{clj} tool uses  local coordinates to support projects  that exist only
+on your local disk.  Extract the  @file{clj-time} parts of this application out
+into a library in a parallel directory @file{time-lib}.
+
+@example
+├── time-lib
+│   ├── deps.edn
+│   └── src
+│       └── hello_time.clj
+└── hello-time
+    ├── deps.edn
+    └── src
+        └── hello.clj
+@end example
+
+@heading Library File @file{time-lib/src/hello_time.clj}
+
+Under @file{time-lib}, use a copy of the @file{deps.edn} file you already have,
+and create a file @file{src/hello_time.clj}:
+
+@(time-lib__deps.edn@)=
+{:deps
+  {clj-time {:mvn/version "0.4.2"}}}
+
+@
+
+@post_create time-lib__deps.edn mv time-lib__deps.edn clj/time-lib/deps.edn
+
+@(time-lib__hello_time.clj@)=
+(ns hello-time
+  (:require [clj-time.core :as t]
+            [clj-time.format :as f]))
+
+(defn now
+  "Returns the current datetime"
+  []
+  (t/now))
+
+(defn time-str
+  "Returns a string representation of a datetime in the local time zone."
+  [dt]
+  (f/unparse
+    (f/with-zone (f/formatter "hh:mm aa") (t/default-time-zone))
+    dt))
+
+@
+
+@post_create time-lib__hello_time.clj mv time-lib__hello_time.clj clj/time-lib/src/hello_time.clj
+
+@heading @file{hello-time__hello.clj}
+
+Update the  application at @file{hello-world/src/hello.clj} to  use your library
+instead (place the updated program in @file{hello-time/src}:
+
+@(hello-time__hello.clj@)=
+(ns hello
+  (:require [hello-time :as ht]))
+
+(defn -main []
+  (println "Hello Time, the world is" (ht/time-str (ht/now))))
+
+@
+
+@post_create hello-time__hello.clj mv hello-time__hello.clj clj/hello-time/src/hello.clj
+
+Modify @file{hello-world/deps.edn} to use a local coordinate that refers to the
+root directory of the @file{time-lib} library (make sure to update the path for
+your machine):
+
+@(hello-time__deps.edn@)=
+{:deps
+ {time-lib {:local/root "../time-lib"}}}
+
+@
+
+@post_create hello-time__deps.edn mv hello-time__deps.edn clj/hello-time/deps.edn
+
+You can  then test  everything from  the hello-world  directory by  running the
+application:
+
+@example
+$ clj -m hello
+Hello world, the time is 02:07 PM
+@end example
+
+@c _____________________________________
+
+@node Makefile Hello Time Target
+@appendixsubsubsec Makefile Hello Time Target
+
+@<Makefile---Example Targets@>=
+# HELLO TIME
+############
+
+.PHONY : hello-time
+
+hello-time : clj/hello-time/src/hello.clj
+	cd clj/hello-time && clj -m hello
+
+clj/hello-time/src/hello.clj : $(FILE).twjr
+	jrtangle $(FILE).twjr
+
+@
 
 
 
