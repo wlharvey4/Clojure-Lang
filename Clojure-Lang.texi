@@ -19,8 +19,8 @@
 @defindex cr   @c chunk reference
 @c *****************************************************************************
 
-@c VERSION 0.0.6
-@c DATE    2018-10-29T08:45
+@c VERSION 0.0.7
+@c DATE    2018-10-29T15:10
 
 @c *****************************************************************************
 @c DOCUMENT VARIABLES
@@ -336,6 +336,8 @@ problems.
 * Preface::
 * Introduction::
 * Getting Started::
+* Resources::
+* Clojure API Documentation::
 * First appendix::
 * The Makefile::
 * Code Chunk Summaries::
@@ -353,9 +355,9 @@ Preface
 * Conventions::                 Typographical conventions.
 * Acknowledgements::            Acknowledgements.
 
-Rationale
+Important Ideas
 
-* Rationale in Detail::
+* Rationale for Clojure::
 * Dynamic Functional Lisp::
 * Clojure Features::
 * Other Hosts::
@@ -376,6 +378,7 @@ Other Hosts
 
 Getting Started
 
+* New To Clojure::
 * CLI Guide::
 
 CLI Guide
@@ -394,6 +397,22 @@ Run Hello World
 @file{hello-time__hello.clj}
 
 * Makefile Hello Time Target::
+
+Resources
+
+* Community Resources::
+* Learn Clojure::
+* Clojure From The Ground Up::
+
+Community Resources
+
+* Community Discussion::
+* Community Tutorials::
+
+Clojure From The Ground Up
+
+* Welcome::
+* Some Preliminaries::
 
 The Makefile
 
@@ -588,6 +607,21 @@ correct, multithreaded designs.
 @item Transactional Memory System / Reactive Agent System
 @end itemize
 
+
+
+
+@c -----------------------------------------------------------------------------
+
+@menu
+* Rationale for Clojure::
+* Dynamic Functional Lisp::
+* Clojure Features::
+* Other Hosts::
+@end menu
+
+@node Rationale for Clojure
+@section Rationale for Clojure
+
 @heading Rationale
 
 CLOJURE provides the following features (benefits):
@@ -599,19 +633,7 @@ CLOJURE provides the following features (benefits):
 @item supports CONCURRENCY
 @end itemize
 
-
-
-@c -----------------------------------------------------------------------------
-
-@menu
-* Rationale in Detail::
-* Dynamic Functional Lisp::
-* Clojure Features::
-* Other Hosts::
-@end menu
-
-@node Rationale in Detail
-@section Rationale in Detail
+@heading Rationale In Detail
 
 @itemize
 @item Stakeholders want the JVM
@@ -1146,8 +1168,49 @@ Language Runtime (DLR).
 @c -----------------------------------------------------------------------------
 
 @menu
+* New To Clojure::
 * CLI Guide::
 @end menu
+
+@node New To Clojure
+@section New To Clojure
+
+New to Clojure  and not sure where to  start? Here are a few  good resources to
+get you off on the right foot:
+
+@itemize
+@item
+@url{https://changelog.com/posts/rich-hickeys-greatest-hits/,
+Rich Hickey's Greatest Hits}
+
+@item
+@url{http://www.braveclojure.com/,
+Clojure For The Brave And True}
+
+@item
+@url{http://aphyr.com/posts/301-clojure-from-the-ground-up-welcome,
+Clojure From The Ground Up}
+
+@xref{Clojure From The Ground Up}
+
+@item
+@url{http://4clojure.org/,
+4Clojure (Learn Clojure Interactively)}
+
+@item
+@url{http://clojurescriptkoans.com/,
+ClojureScript Koans}
+
+@item
+@url{https://repl.it/languages/clojure,
+Run Clojure Code In Your Browser}
+
+@end itemize
+
+
+
+
+@c -----------------------------------------------------------------------------
 
 @node CLI Guide
 @section CLI Guide
@@ -1191,7 +1254,7 @@ using Clojure and Java libraries
 After  installing Clojure  via  HomeBrew,  the first  time  I  ran the  command
 @command{clojure} from Bash prompt, this occurred:
 
-@example
+@verbatim
 >>>[532]pine:Pine ~/Dev/Programming/Languages/Clojure
 ?clojure
 Downloading: org/clojure/clojure/1.9.0/clojure-1.9.0.pom from https://repo1.maven.org/maven2/
@@ -1203,7 +1266,34 @@ Downloading: org/clojure/spec.alpha/0.1.143/spec.alpha-0.1.143.jar from https://
 Downloading: org/clojure/core.specs.alpha/0.1.24/core.specs.alpha-0.1.24.jar from https://repo1.maven.org/maven2/
 Clojure 1.9.0
 user=>
-@end example
+@end verbatim
+
+@heading Leiningen Initialization
+
+After installing Leiningen via HomeBrew, the first time I ran the command
+@command{lein repl}, this occurred:
+
+@verbatim
+?lein repl
+Retrieving org/clojure/tools.nrepl/0.2.12/tools.nrepl-0.2.12.pom from central
+Retrieving org/clojure/pom.contrib/0.1.2/pom.contrib-0.1.2.pom from central
+Retrieving org/sonatype/oss/oss-parent/7/oss-parent-7.pom from central
+Retrieving clojure-complete/clojure-complete/0.2.4/clojure-complete-0.2.4.pom from clojars
+Retrieving org/clojure/tools.nrepl/0.2.12/tools.nrepl-0.2.12.jar from central
+Retrieving clojure-complete/clojure-complete/0.2.4/clojure-complete-0.2.4.jar from clojars
+nREPL server started on port 60559 on host 127.0.0.1 - nrepl://127.0.0.1:60559
+REPL-y 0.3.7, nREPL 0.2.12
+Clojure 1.8.0
+Java HotSpot(TM) 64-Bit Server VM 11+28
+    Docs: (doc function-name-here)
+          (find-doc "part-of-name-here")
+  Source: (source function-name-here)
+ Javadoc: (javadoc java-object-or-class-here)
+    Exit: Control+D or (exit) or (quit)
+ Results: Stored in vars *1, *2, *3, an exception in *e
+
+user=>
+@end verbatim
 
 
 @c .....................................
@@ -1625,6 +1715,312 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 @iftex
 @textfonts @rm
 @end iftex
+
+
+
+
+
+
+
+
+
+@c *****************************************************************************
+
+@node Resources
+@chapter Resources
+@cindex resources
+
+
+
+@c -----------------------------------------------------------------------------
+
+@menu
+* Community Resources::
+* Learn Clojure::
+* Clojure From The Ground Up::
+@end menu
+
+@node Community Resources
+@section Community Resources
+@cindex resources, community
+
+@url{https://clojure.org/community/resources, Community Resources}
+
+
+@c .....................................
+
+@menu
+* Community Discussion::
+* Community Tutorials::
+@end menu
+
+@node Community Discussion
+@subsection Community Discussion
+@cindex resources, community discussion
+
+
+@c .....................................
+
+@node Community Tutorials
+@subsection Community Tutorials
+@cindex resources, tutorials
+@cindex tutorials
+
+
+
+
+@c -----------------------------------------------------------------------------
+
+@node Learn Clojure
+@section Learn Clojure
+@cindex learn clojure
+
+@url{https://clojure.org/guides/learn/syntax, Learn Clojure}
+
+
+
+
+@c -----------------------------------------------------------------------------
+
+@node Clojure From The Ground Up
+@section Clojure From The Ground Up
+@cindex from the ground up
+
+@url{https://aphyr.com/posts/301-clojure-from-the-ground-up-welcome,
+Clojure From The Ground Up}
+
+
+@c .....................................
+
+@menu
+* Welcome::
+* Some Preliminaries::
+@end menu
+
+@node Welcome
+@subsection Welcome To Clojure From The Ground Up
+@cindex welcome
+
+@heading Learn Functional Programming With Clojure
+
+This book is about how to program.   This guide aims to introduce newcomers and
+experienced programmers alike to the beauty of functional programming, starting
+with the simplest  building blocks of software.  We’ll be  learning in Clojure,
+which is a  modern dialect of a  very old family of  computer languages, called
+Lisp.  @emph{By the end  of this series, you’ll have a  thorough command of the
+Clojure programming language.}
+
+@subheading What About Programming?
+
+We’re going to explore the nature of syntax, metalanguages, values, references,
+mutation,  control flow,  and concurrency.
+
+@itemize
+@item
+syntax and its nature
+@item
+metalanguages
+@item
+values
+@item
+references
+@item
+mutation
+@item
+control flow
+@item
+concurrency
+@end itemize
+
+Many  languages leave  these ideas  implicit in  the language  construction, or
+don’t have  a concept of  metalanguages or  concurrency at all.   Clojure makes
+these ideas explicit, first-class language constructs.  At the same time, we’re
+going  to  defer or  omit  any  serious  discussion  of static  type  analysis,
+hardware, and performance.
+
+@subheading What About Clojure?
+
+In more  general terms, Clojure  is a  well-rounded language.  It  offers broad
+library support and runs on multiple operating systems.  Clojure performance is
+not  terrific,  but  is  orders  of magnitude  faster  than  Ruby,  Python,  or
+Javascript.  Unlike  some faster  languages, Clojure  emphasizes safety  in its
+type system  and approach  to parallelism,  making it  easier to  write correct
+multithreaded  programs.  Clojure  is concise,  requiring very  little code  to
+express complex  operations.  It offers a  REPL and dynamic type  system: ideal
+for beginners to experiment with, and well-suited for manipulating complex data
+structures.  A consistently designed standard  library and full-featured set of
+core datatypes rounds out the Clojure toolbox.
+
+@subheading Clojure's Drawbacks
+
+Finally, there  are some drawbacks.   As a  compiled language, Clojure  is much
+slower to start than a scripting language; this makes it unsuitable for writing
+small  scripts  for interactive  use.   Clojure  is  also not  well-suited  for
+high-performance numeric operations.   Though it is possible, you  have to jump
+through hoops to achieve performance comparable  with Java.
+
+
+@c .....................................
+
+@node Some Preliminaries
+@subsection Some Preliminaries
+
+@table @b
+
+@cindex @code{nil}
+@item nil
+@code{nil}  is  the most  basic  value  in  Clojure.  It  represents  emptiness,
+nothing-doing, not-a-thing. The absence of information.
+
+@cindex boolean
+@cindex @code{true}
+@cindex @code{false}
+@cindex Lisp logical system
+@item Booleans
+@code{true}   and  @code{false}   are   a  pair   of   special  values   called
+@dfn{Booleans}.  They mean exactly what you  think: whether a statement is true
+or false.   @code{true}, @code{false}, and  @code{nil} form the three  poles of
+the Lisp logical system.
+
+@item Values
+Values are the ``nouns'' of programming: @code{nil}, @code{true}, @code{0}, and
+@code{"hi there!"} are all different types of values;
+
+@cindex symbol
+@item Symbols
+But most  sentences aren’t just  about stating the  existence of a  thing; they
+involve action.  We need verbs.
+
+@verbatim
+user=> inc
+#<core$inc clojure.core$inc@6f7ef41c>
+@end verbatim
+
+This  is a  verb called  @code{inc} –  short for  ``increment''.  Specifically,
+@code{inc}  is  a  @dfn{symbol}  which  points  to  a  verb:  @verb{|#<core$inc
+clojure.core$inc@6f7ef41c>|}.   Symbols are  references to  other values.  When
+Clojure evaluates a symbol, it looks up that symbol’s meaning.  Look up @code{inc}, and
+you get @verb{|#<core$inc clojure.core$inc@6f7ef41c>|}.
+
+@cindex quote
+@item quote
+Can we refer to the symbol itself, without looking up its meaning?
+
+@verbatim
+user=> 'inc
+inc
+@end verbatim
+
+@cindex sentence
+@cindex expression
+@cindex statement
+Yes. The single quote @kbd{'} escapes a sentence.  In programming languages, we
+call  @dfn{sentences} @emph{expressions}  or @emph{statements}.   A quote  says
+``Rather than evaluating this expression’s text, simply return the text itself,
+unchanged.''  Quote  a symbol,  get a  symbol.  Quote a  number, get  a number.
+Quote anything, and get it back exactly as it came in.
+
+@item list
+@cindex list
+@cindex LISP
+
+@verbatim
+user=> '(1 2 3)
+(1 2 3)
+@end verbatim
+
+A list  is new kind of  value, one surrounded by  parentheses.  LISP originally
+stood for ``LISt Processing'', and lists are still at the core of the language.
+In fact, they form the most basic  way to compose expressions, or sentences.  A
+@dfn{list} is a single expression which has multiple parts.  For instance, this
+list  contains three  elements: the  numbers  1, 2,  and 3.  Lists can  contain
+anything: numbers, strings, even other lists.
+
+@item sentence
+But  let’s  try something  simpler.   Something  we  know  how to  talk  about.
+``Increment the number zero.''  We have  a symbol for incrementing, and we know
+how to write the number zero.  Let’s combine them in a list:
+
+@verbatim
+user=> '(inc 0)
+(inc 0)
+@end verbatim
+
+@cindex sentence
+@cindex expression
+A basic  sentence.  Remember, since it’s  quoted, we’re talking about  the tree,
+the text,  the expression, by itself.  Absent interpretation.  If we  remove the
+single-quote, Clojure will interpret the expression:
+
+@verbatim
+user=> (inc 0)
+1
+@end verbatim
+
+Incrementing zero yields one.  And if we wanted to increment that value?
+
+@verbatim
+user=> (inc (inc 0))
+2
+@end verbatim
+
+@cindex sentence
+A sentence in Lisp  is a list.  It starts with a verb,  and is followed by zero
+or more objects for  that verb to act on.  Each part of  the list can itself be
+another list, in  which case that nested  list is evaluated first,  just like a
+nested clause in a  sentence.  Every list starts with a verb.   Parts of a list
+are evaluated from  left to right.  Innermost lists are  evaluated before outer
+lists.
+
+@verbatim
+(+ 1 (- 5 2) (+ 3 4))
+(+ 1 3       (+ 3 4))
+(+ 1 3       7)
+11
+@end verbatim
+
+@cindex grammar
+@item grammar
+That’s it.  The  entire grammar of Lisp: the structure  for every expression in
+the language.  We transform expressions  by substituting meanings  for symbols,
+and obtain some result.
+
+@cindex lambda calculus
+@item Lambda Calculus
+This is the  core of the Lambda  Calculus, and it is the  theoretical basis for
+almost  all  computer languages.   All  languages  express  the text  of  their
+programs  in   different  ways,  but   internally  all  construct  a   tree  of
+expressions.  Lisp simply makes it explicit.
+
+@end table
+
+
+
+
+
+
+
+
+@c *****************************************************************************
+
+@node Clojure API Documentation
+@chapter Clojure API Documentation
+@cindex api
+
+@url{https://clojure.org/api/api, Clojure API Documentation}
+
+@heading Cheatsheet
+
+@url{https://clojure.org/api/cheatsheet, Cheatsheet}
+
+@heading ClojureDocs
+
+@url{https://clojuredocs.org/, ClojureDocs}
+
+
+
+
+
 
 
 
