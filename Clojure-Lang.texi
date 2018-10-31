@@ -413,6 +413,11 @@ Clojure From The Ground Up
 
 * Welcome::
 * Some Preliminaries::
+* Types::
+
+Clojure's Type System Is Strong And Dynamic
+
+* Integer Type::
 
 The Makefile
 
@@ -1795,6 +1800,7 @@ Clojure From The Ground Up}
 @menu
 * Welcome::
 * Some Preliminaries::
+* Types::
 @end menu
 
 @node Welcome
@@ -1995,7 +2001,166 @@ expressions.  Lisp simply makes it explicit.
 @end table
 
 
+@c .....................................
 
+@node Types
+@subsection Types
+@cindex type
+
+We say that a @dfn{type} is a group of values which work in the same way.  It’s
+a property that some  values share, which allows us to  organize the world into
+sets of similar things.  Types also help  us verify that a program makes sense.
+Types can overlap and intersect each other.  Other types completely subsume one
+another.
+
+Every language  has a type  system; a particular  way of organizing  nouns into
+types, figuring out  which verbs make sense on which  types, and relating types
+to  one another.  Some  languages are  strict, and  others  more relaxed.  Some
+emphasize hierarchy, and others a more ad-hoc view of the world.
+
+@heading Clojure's Type System Is Strong And Dynamic
+@cindex strong type system
+@cindex dynamic type system
+
+We  call Clojure’s  type system  @emph{strong} in  that operations  on improper
+types are simply not  allowed: the program will explode if  asked to subtract a
+dandelion.  We  also say that  Clojure’s types are @emph{dynamic}  because they
+are enforced when the program is run, instead of when the program is first read
+by the computer.
+
+Because Clojure is built  on top of Java, many of its types  are plain old Java
+types.
+
+@c _____________________________________
+
+@menu
+* Integer Type::
+@end menu
+
+@node Integer Type
+@subsubsection Integer Type
+@cindex integer type
+@cindex @file{java.lang.Long}
+@cindex Long
+
+@heading Long
+
+Clojure's basic Integer type is a @file{java.lang.Long}, or ``Long'' for short.
+
+@example
+user=> (type 3)
+java.lang.Long
+@end example
+
+@cindex signed two's complement representation
+Longs, internally, are represented as a group of sixty-four binary digits (ones
+and zeroes),  written down  in a particular  pattern called  @emph{signed two’s
+complement representation}.
+
+There are only two things to remember about Longs:
+
+@enumerate
+@item
+Longs  use one  bit  to store  the  sign:  whether the  number  is positive  or
+negative.
+
+@item
+@cindex MAX_VALUE
+The other 63 bits represent the size of the number.  The biggest number you can
+represent with a long  is: 2^^63 - 1 (called MAX_VALUE),  and the smallest long
+is -2^^63.
+
+@verbatim
+user=> Long/MAX_VALUE
+9223372036854775807
+@end verbatim
+
+@end enumerate
+
+@heading Type Protection
+
+What happens if you add one to the biggest Long?
+
+@example
+user=> (inc Long/MAX_VALUE)
+
+ArithmeticException integer overflow
+clojure.lang.Numbers.throwIntOverflow
+(Numbers.java:1388)
+@end example
+
+@cindex integer overflow error
+An error  occurs!  This is Clojure  telling us that something  went wrong.  The
+type of error was an  @file{ArithmeticException}, and its message was ``integer
+overflow'', meaning ``this type of number  can’t hold a number that big''.  The
+error  came  from  a  specific  place  in  the  source  code  of  the  program:
+@file{Numbers.java}, on line 1388.  That’s a part of the Clojure source code.
+
+The  important thing  is that  Clojure’s type  system protected  us from  doing
+something  dangerous;  instead  of  returning   a  corrupt  value,  it  aborted
+evaluation and returned an error.
+
+@heading BigInt
+@cindex BigInt
+@cindex @code{bigint}
+@cindex arbitrary-precision integers
+
+If you  do need  to talk about  really big  numbers, you can  use a  BigInt: an
+arbitrary-precision integer.  Let’s convert the biggest Long into a BigInt, then
+increment it:
+
+@example
+user=> (inc (bigint Long/MAX_VALUE))
+9223372036854775808N
+@end example
+
+Notice  the  N at  the  end?   That’s  how Clojure  writes  arbitrary-precision
+integers.
+
+@example
+user=> (type 5N)
+clojure.lang.BigInt
+@end example
+
+@heading Integer, Short, And Byte
+
+There are also smaller integers.
+
+@example
+user=> (type (int 0))
+java.lang.Integer
+user=> (type (short 0))
+java.lang.Short
+user=> (type (byte 0))
+java.lang.Byte
+@end example
+
+@subheading Integer
+@cindex Integer
+
+Integers are half the size of Longs; they store values in 32 bits.
+Their largest value is therefore 2^^31 - 1.
+
+@subheading Short
+@cindex Short
+
+Shorts are 16 bits.  Largest value is 2^^15 - 1.
+
+@subheading Byte
+@cindex Byte
+
+Bytes are 8 bits.  Largest value is 2^^7 - 1.
+
+@subheading Largest Integer Values
+
+@example
+user=> Integer/MAX_VALUE
+2147483647
+user=> Short/MAX_VALUE
+32767
+user=> Byte/MAX_VALUE
+127
+@end example
 
 
 
