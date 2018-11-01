@@ -19,8 +19,8 @@
 @defindex cr   @c chunk reference
 @c *****************************************************************************
 
-@c VERSION 0.0.7
-@c DATE    2018-10-29T15:10
+@c VERSION 0.0.9
+@c DATE    2018-10-3121:00
 
 @c *****************************************************************************
 @c DOCUMENT VARIABLES
@@ -417,7 +417,17 @@ Clojure From The Ground Up
 
 Clojure's Type System Is Strong And Dynamic
 
-* Integer Type::
+* Integers::
+* Fractional Numbers::
+* Mathematical Operators::
+* Strings::
+* Booleans::
+* Symbols::
+* Keywords::
+* Lists::
+* Vectors::
+* Sets::
+* Maps::
 
 The Makefile
 
@@ -2034,11 +2044,21 @@ types.
 @c _____________________________________
 
 @menu
-* Integer Type::
+* Integers::
+* Fractional Numbers::
+* Mathematical Operators::
+* Strings::
+* Booleans::
+* Symbols::
+* Keywords::
+* Lists::
+* Vectors::
+* Sets::
+* Maps::
 @end menu
 
-@node Integer Type
-@subsubsection Integer Type
+@node Integers
+@subsubsection Integers
 @cindex integer type
 @cindex @file{java.lang.Long}
 @cindex Long
@@ -2161,6 +2181,774 @@ user=> Short/MAX_VALUE
 user=> Byte/MAX_VALUE
 127
 @end example
+
+@c _____________________________________
+
+@node Fractional Numbers
+@subsubsection Fractional Numbers
+@cindex fractional numbers
+@cindex floating-point numbers
+@cindex Double
+@cindex Float
+
+@heading Floating-Point Numbers
+
+To represent  numbers between  integers, we  often use  floating-point numbers,
+which can represent  small numbers with fine precision, and  large numbers with
+coarse  precision.  The  important  thing to  know is  floats  and doubles  are
+approximations. There are limits to their correctness.
+
+@enumerate
+@item
+Floats use 32  bits
+
+@item
+Doubles  use 64.  Doubles  are the default in Clojure.
+
+@item
+To represent fractions exactly, we can use the ratio type:
+
+@verbatim
+user=> (type 1/3)
+clojure.lang.Ratio
+@end verbatim
+@end enumerate
+
+@example
+user=> (type 1.23)
+java.lang.Double
+user=> (type (float 1.23))
+java.lang.Float
+
+user=> 0.99999999999999999
+1.0
+@end example
+
+
+@c _____________________________________
+
+@node Mathematical Operators
+@subsubsection Mathematical Operators
+@cindex mathemtical operators
+@cindex operators
+
+The  exact behavior  of mathematical  operations  in Clojure  depends on  their
+types.  In general,  though, Clojure aims to preserve  information.  Adding two
+longs returns a long; adding a double and a long returns a double.
+
+@example
+user=> (+ 1 2)
+3
+user=> (+ 1 2.0)
+3.0
+@end example
+
+3 and 3.0 are not the same number; one  is a long, and the other a double.  But
+for most purposes, they’re equivalent, and Clojure will tell you so:
+
+@example
+user=> (= 3 3.0)
+false
+user=> (== 3 3.0)
+true
+@end example
+
+@cindex @kbd{=}
+@cindex @kbd{==}
+@cindex equivalence
+@kbd{=} asks  whether all the things  that follow are equal.   Since floats are
+approximations, @kbd{=} considers them  different from integers.  @kbd{==} also
+compares things, but a little more loosely: it considers integers equivalent to
+their floating-point representations.
+
+@cindex add
+@cindex subtract
+@cindex multiply
+@cindex divide
+We  can also  subtract with  @kbd{-}, multiply  with @kbd{*},  and divide  with
+@kbd{/}.
+
+@cindex n-arity
+Putting the verb first in each list allows  us to add or multiply more than one
+number in the same step:
+
+@example
+user=> (+ 1 2 3)
+6
+user=> (* 2 3 1/5)
+6/5
+@end example
+
+Subtraction  with more  than 2  numbers subtracts  all later  numbers from  the
+first.  Division divides the first number by all the rest.
+
+@example
+user=> (- 5 1 1 1)
+2
+user=> (/ 24 2 3)
+4
+@end example
+
+@cindex single-arity
+By extension, we can define  useful interpretations for numeric operations with
+just a single number:
+
+@example
+user=> (+ 2)
+2
+user=> (- 2)
+-2
+user=> (* 4)
+4
+user=> (/ 4)
+1/4
+@end example
+
+@cindex identify
+@cindex additive identiy
+@cindex multiplicative identity
+We can also add or multiply a list of no numbers at all, obtaining the additive
+and multiplicative  identities, respectively.  This might seem  odd, especially
+coming from  other languages,  but we’ll see  later that  these generalizations
+make it easier to reason about higher-level numeric operations.
+
+@example
+user=> (+)
+0
+user=> (*)
+1
+@end example
+
+@cindex @kbd{<=}
+@cindex @kbd{>=}
+Often, we want  to ask which number  is bigger, or if one  number falls between
+two others.  @kbd{<=} means  ``less than  or equal to'',  and asserts  that all
+following values are in order from smallest to biggest.
+
+@example
+user=> (<= 1 2 3)
+true
+user=> (<= 1 3 2)
+false
+@end example
+
+@cindex @kbd{<}
+@cindex @kbd{>}
+@kbd{<} means ``strictly less than'', and works just like <@kbd{=}, except that
+no two values may be equal.
+
+@example
+user=> (<= 1 1 2)
+true
+user=> (< 1 1 2)
+false
+@end example
+
+Their friends @kbd{>} and @kbd{>=} mean  ``greater than'' and ``greater than or
+equal to'', respectively, and assert that numbers are in descending order.
+
+@example
+user=> (> 3 2 1)
+true
+user=> (> 1 2 3)
+false
+@end example
+
+@cindex @code{inc}
+@cindex @code{dec}
+Also commonly used are @code{inc} and @code{dec}, which add and subtract one to
+a number, respectively.
+
+One final note: equality tests can take more than 2 numbers as well.
+
+@example
+user=> (= 2 2 2)
+true
+user=> (= 2 2 3)
+false
+@end example
+
+
+@c _____________________________________
+
+@node Strings
+@subsubsection Strings
+@cindex strings
+
+We saw that strings are text, surrounded by double quotes, like "foo".  Strings
+in Clojure are, like Longs, Doubles, and company, backed by a Java type:
+
+@example
+user=> (type "cat")
+java.lang.String
+@end example
+
+@subheading @code{str}
+
+We can make  almost anything into a string with  @code{str}.  Strings, symbols,
+numbers, booleans;  every value in  Clojure has a string  representation.  Note
+that @code{nil}’s string representation is ""; an empty string.
+
+@example
+user=> (str "cat")
+"cat"
+user=> (str 'cat)
+"cat"
+user=> (str 1)
+"1"
+user=> (str true)
+"true"
+user=> (str '(1 2 3))
+"(1 2 3)"
+user=> (str nil)
+""
+@end example
+
+@subsubheading @code{str} Concatenation
+
+@code{str} can also combine things together into a single string, which we call
+@dfn{concatenation}.
+
+@example
+user=> (str "meow " 3 " times")
+"meow 3 times"
+@end example
+
+@heading Regular Expressions
+@cindex regular expression
+@cindex @code{re-find}
+@cindex @code{re-matches}
+
+To look for patterns in text, we can use a @dfn{regular expression}, which is a
+tiny language  for describing particular arrangements  of text.  @code{re-find}
+and @code{re-matches} look for occurrences of a regular expression in a string.
+To find a cat:
+
+@example
+user=> (re-find #"cat" "mystic cat mouse")
+"cat"
+user=> (re-find #"cat" "only dogs here")
+nil
+@end example
+
+That @samp{#"..."} is Clojure’s way of writing a regular expression.
+
+With  @code{re-matches}, you  can extract  particular parts  of a  string which
+match an  expression.  Here we find  two strings, separated by  a @kbd{:}.  The
+parentheses mean  that the regular expression  should capture that part  of the
+match.  We get back  a list containing the part of the  string that matched the
+first parentheses, followed by the part that matched the second parentheses.
+
+@example
+user=> (rest (re-matches #"(.+):(.+)" "mouse:treat"))
+("mouse" "treat")
+@end example
+
+Regular  expressions are  a  powerful  tool for  searching  and matching  text,
+especially when working  with data files.  Since regexes work  the same in most
+languages, you can use any guide online  to learn more.  It’s not something you
+have to  master right  away; just learn  specific tricks as  you find  you need
+them.   For   a  deeper  guide,  try   Fitzgerald’s  @cite{Introducing  Regular
+Expressions}.
+
+@c_____________________________________
+
+@node Booleans
+@subsubsection Booleans and Logic
+@cindex boolean type
+@cindex logic
+@cindex truthiness
+@cindex @code{true}
+@cindex @code{false}
+@cindex @code{nil}
+
+@heading Truthiness
+
+Everything in  Clojure has a  sort of charge,  a truth value,  sometimes called
+``truthiness''.   @code{true}   is  positive  and  @code{false}   is  negative.
+@code{nil} is negative, too.
+
+@subheading @code{false} Values
+@cindex @code{false}
+
+@example
+user=> (boolean false)
+false
+user=> (boolean nil)
+false
+@end example
+
+@subheading @code{true} Values
+@cindex @code{true}
+
+Every other value in Clojure is positive.
+
+@example
+user=> (boolean true)
+true
+user=> (boolean 0)
+true
+user=> (boolean 1)
+true
+user=> (boolean "hi there")
+true
+user=> (boolean str)
+true
+@end example
+
+If you’re coming from a C-inspired  language, where 0 is considered false, this
+might be a bit surprising.  Likewise, in much of POSIX, 0 is considered success
+and  nonzero values  are failures.   Lisp allows  no such  confusion: the  only
+negative values are @code{false} and @code{nil}.
+
+@heading @code{and or not}
+
+We can reason  about truth values using @code{and},  @code{or}, and @code{not}.
+@code{and}  returns the  first negative  value, or  the last  value if  all are
+truthy.
+
+@subheading @code{and}
+@cindex @code{and}
+
+@example
+user=> (and true false true)
+false
+user=> (and true true true)
+true
+user=> (and 1 2 3)
+3
+@end example
+
+@subheading @code{or}
+@cindex @code{or}
+
+Similarly, or returns the first positive value.
+
+@example
+user=> (or false 2 3)
+2
+user=> (or false nil)
+nil
+@end example
+
+@subheading @code{not}
+@cindex @code{not}
+
+And @code{not} inverts the logical sense of a value:
+
+@example
+user=> (not 2)
+false
+user=> (not nil)
+true
+@end example
+
+@subheading Boolean Logic
+@cindex boolean logic
+
+We’ll learn more about Boolean logic  when we start talking about control flow;
+the way we alter evaluation of a program  and express ideas like ``if I’m a cat,
+then meow incessantly''.
+
+@c _____________________________________
+
+@node Symbols
+@subsubsection Symbols
+@cindex symbols
+
+Symbols are bare strings of characters, like @samp{foo} or @kbd{+}.
+
+@example
+user=> (class 'str)
+clojure.lang.Symbol
+@end example
+
+@cindex symbol, names
+Symbols can have either  short or full names.  The short name  is used to refer
+to things locally.  The fully qualified  name is used to refer unambiguously to
+a symbol from anywhere.  If I were a  symbol, my name would be ``Kyle'', and my
+full name ``Kyle Kingsbury.''
+
+Symbol names are separated with a @kbd{/}.  For instance, the symbol @code{str}
+is also present in a  family called @file{clojure.core}; the corresponding full
+name is @code{clojure.core/str}.
+
+@example
+user=> (= str clojure.core/str)
+true
+user=> (name 'clojure.core/str)
+"str"
+@end example
+
+When we talked about the maximum size of an integer, that was a fully-qualified
+symbol, too.
+
+@example
+(type 'Integer/MAX_VALUE)
+clojure.lang.Symbol
+@end example
+
+The job  of symbols  is to  refer to things,  to point  to other  values.  When
+evaluating a program, symbols are looked up and replaced by their corresponding
+values.  That’s not the only use of symbols, but it’s the most common.
+
+@c _____________________________________
+
+@node Keywords
+@subsubsection Keywords
+@cindex Keywords
+
+Closely  related to  symbols  and  strings are  keywords,  which  begin with  a
+@kbd{:}.  Keywords are  like strings in that  they’re made up of  text, but are
+specifically intended for use as labels or identifiers.  These aren’t labels in
+the sense  of symbols: keywords  aren’t replaced  by any other  value.  They’re
+just names, by themselves.
+
+@example
+user=> (type :cat)
+clojure.lang.Keyword
+user=> (str :cat)
+":cat"
+user=> (name :cat)
+"cat"
+@end example
+
+As  labels,  keywords are  most  useful  when paired  with  other  values in  a
+collection, like a map.  Keywords can also be used as verbs to look up specific
+values in other data types.  We’ll learn more about keywords shortly.
+
+@c _____________________________________
+
+@node Lists
+@subsubsection Lists
+@cindex lists
+
+A  collection is  a group  of  values.  It’s  a container  which provides  some
+structure,  some framework,  for  the things  that  it holds.   We  say that  a
+collection contains elements, or members.  We  saw one kind of collection --- a
+list --- in the previous chapter.
+
+@example
+user=> '(1 2 3)
+(1 2 3)
+user=> (type '(1 2 3))
+clojure.lang.PersistentList
+@end example
+
+@cindex @code{quote}
+@cindex @code{list}
+Remember,  we  quote   lists  with  a  @kbd{'}  to  prevent   them  from  being
+evaluated.  You can also construct a list using @code{list}:
+
+@example
+user=> (list 1 2 3)
+(1 2 3)
+@end example
+
+Lists are comparable just like every other value:
+
+@example
+user=> (= (list 1 2) (list 1 2))
+true
+@end example
+
+@cindex @code{conj}
+You can modify a list by @code{conj}oining an element onto it:
+
+@example
+user=> (conj '(1 2 3) 4)
+(4 1 2 3)
+@end example
+
+@cindex linked list
+We added  4 to the  list ---  but it appeared  at the front.   Why? Internally,
+lists are  stored as a chain  of values: each link  in the chain is  a tiny box
+which holds the value and a connection  to the next link.  This data structure,
+called a @dfn{linked list}, offers immediate  access to the first element.  But
+getting to  the second element  requires an extra hop  down the chain;  and the
+third element a hop after that, and so on.
+
+@cindex @code{first}
+@cindex @code{second}
+@example
+user=> (first (list 1 2 3))
+1
+
+user=> (second (list 1 2 3))
+2
+
+user=> (nth (list 1 2 3) 2)
+3
+@end example
+
+@cindex @code{nth}
+@code{nth} gets the element of an ordered collection at a particular index.  The
+first element is index 0, the second is index 1, and so on.
+
+This means  that lists  are well-suited for  small collections,  or collections
+which are  read in linear order,  but are slow  when you want to  get arbitrary
+elements from  later in the list.  For fast access  to every element, we  use a
+vector.
+
+@c _____________________________________
+
+@node Vectors
+@subsubsection Vectors
+@cindex vector
+
+Vectors are  surrounded by square brackets,  just like lists are  surrounded by
+parentheses.  Because vectors  aren’t evaluated like lists are,  there’s no need
+to quote them:
+
+@example
+user=> [1 2 3]
+[1 2 3]
+user=> (type [1 2 3])
+clojure.lang.PersistentVector
+@end example
+
+@cindex @code{vector}
+@cindex @code{vec}
+You can also create vectors with @code{vector}, or change other structures into
+vectors with @code{vec}:
+
+@example
+user=> (vector 1 2 3)
+[1 2 3]
+user=> (vec (list 1 2 3))
+[1 2 3]
+@end example
+
+@cindex @code{conj}
+@code{conj} on a vector adds to the end, not the start:
+
+@example
+user=> (conj [1 2 3] 4)
+[1 2 3 4]
+@end example
+
+@cindex @code{first}
+@cindex @code{second}
+@cindex @code{nth}
+Our  friends @code{first},  @code{second}, and  @code{nth} work  here too;  but
+unlike  lists,  @code{nth} is  fast  on  vectors.  That’s  because  internally,
+vectors are represented  as a very broad  tree of elements, where  each part of
+the tree branches  into 32 smaller trees.   Even very large vectors  are only a
+few layers deep, which means getting to elements only takes a few hops.
+
+In addition  to first,  you’ll often want  to get the  remaining elements  in a
+collection.  There are two ways to do this:
+
+@cindex @code{rest}
+@cindex @code{next}
+@example
+user=> (rest [1 2 3])
+(2 3)
+user=> (next [1 2 3])
+(2 3)
+@end example
+
+@code{rest} and @code{next}  both return ``everything but  the first element''.
+They differ only by what happens when there are no remaining elements:
+
+@example
+user=> (rest [1])
+()
+user=> (next [1])
+nil
+@end example
+
+@code{rest}  returns logical  @code{true}, @code{next}  returns logical  false.
+Each  has  their uses,  but  in  almost every  case  they’re  equivalent ---  I
+interchange them freely.
+
+@cindex @code{last}
+We can get the final element of any collection with @code{last}:
+
+@example
+user=> (last [1 2 3])
+3
+@end example
+
+@cindex @code{count}
+And figure out how big the vector is with @code{count}:
+
+@example
+user=> (count [1 2 3])
+3
+@end example
+
+Because vectors are intended for looking up  elements by index, we can also use
+them directly as verbs:
+
+@example
+user=> ([:a :b :c] 1)
+:b
+@end example
+
+So we took the vector containing  three keywords, and asked ``What’s the element
+at index 1?''  Lisp, like most (but  not all!) modern languages,  counts up from
+zero, not one.  Index 0 is the first element, index 1 is the second element, and
+so on.  In this vector, finding the element at index 1 evaluates to :b.
+
+Finally,  note  that  vectors  and  lists  containing  the  same  elements  are
+considered equal in Clojure:
+
+@example
+user=> (= '(1 2 3) [1 2 3])
+true
+@end example
+
+In almost all contexts, you can consider vectors, lists, and other sequences as
+interchangeable.  They only differ in their performance characteristics, and in
+a few data-structure-specific operations.
+
+@c _____________________________________
+
+@node Sets
+@subsubsection Sets
+@cindex set
+
+Sometimes you want an unordered collection  of values; especially when you plan
+to  ask  questions like  ``does  the  collection have  the  number  3 in  it?''
+Clojure, like most languages, calls these collections @dfn{sets}.
+
+@example
+user=> #@{:a :b :c@}
+#@{:a :c :b@}
+@end example
+
+Sets are  surrounded by  @samp{#@{@dots{}@}}.  Notice that  though we  gave the
+elements :a, :b, and  :c, they came out in a different  order.  In general, the
+order of sets can  shift at any time.  If you want a  particular order, you can
+ask for it as a list or vector:
+
+@example
+user=> (vec #@{:a :b :c@})
+[:a :c :b]
+@end example
+
+Or ask for the elements in sorted order:
+
+@example
+(sort #@{:a :b :c@})
+(:a :b :c)
+@end example
+
+@cindex @code{conj}
+@code{conj} on a set adds an element:
+
+@example
+user=> (conj #@{:a :b :c@} :d)
+#@{:a :c :b :d@}
+user=> (conj #@{:a :b :c@} :a)
+#@{:a :c :b@}
+@end example
+
+@cindex @code{disj}
+Sets never  contain an  element more  than once,  so @code{conj}ing  an element
+which is  already present does  nothing.  Conversely, one removes  elements with
+@code{disj}:
+
+@example
+user=> (disj #@{"hornet" "hummingbird"@} "hummingbird")
+#@{"hornet"@}
+@end example
+
+@cindex @code{contains?}
+The most common  operation with a set  is to check whether  something is inside
+it.  For this we use @code{contains?}.
+
+@example
+user=> (contains? #@{1 2 3@} 3)
+true
+user=> (contains? #@{1 2 3@} 5)
+false
+@end example
+
+Like vectors,  you can  use the set  itself as a  verb.  Unlike  @code{contains?}, this
+expression returns the element itself (if it was present), or nil.
+
+@example
+user=> (#@{1 2 3@} 3)
+3
+user=> (#@{1 2 3@} 4)
+nil
+@end example
+
+You can make a set out of any other collection with @code{set}.
+
+@example
+user=> (set [:a :b :c])
+#@{:a :c :b@}
+@end example
+
+@c _____________________________________
+
+@node Maps
+@subsubsection Maps
+@cindex map
+
+The  last collection  on our  tour  is the  @dfn{map}: a  data structure  which
+associates  keys with  values.  In  a  dictionary, the  keys are  words and  the
+definitions are the  values.  In a library,  keys are call signs,  and the books
+are  values.  Maps  are  indexes for  looking things  up,  and for  representing
+different pieces of named information together.  Here’s a cat:
+
+@example
+user=> @{:name "mittens" :weight 9 :color "black"@}
+@{:weight 9, :name "mittens", :color "black"@}
+@end example
+
+Maps are  surrounded by braces  @samp{@{@dots{}@}}, filled by  alternating keys
+and values.  In  this map, the three  keys are :name, :color,  and :weight, and
+their values are  "mittens", "black", and 9, respectively.  We  can look up the
+corresponding value for a key with @code{get}:
+
+@example
+user=> (get @{"cat" "meow" "dog" "woof"@} "cat")
+"meow"
+user=> (get @{:a 1 :b 2@} :c)
+nil
+@end example
+
+@cindex @code{get}
+@code{get} can  also take a default  value to return instead  of @code{nil}, if
+the key doesn’t exist in that map.
+
+@example
+user=> (get @{:glinda :good@} :wicked :not-here)
+:not-here
+@end example
+
+Since lookups are so important for maps, we can use a map as a verb directly:
+
+@example
+user=> (@{"amlodipine" 12 "ibuprofen" 50@} "ibuprofen")
+50
+@end example
+
+And conversely, keywords can also be used as verbs, which look themselves up in
+maps:
+
+@example
+user=> (:raccoon @{:weasel "queen" :raccoon "king"@})
+"king"
+@end example
+
+@cindex @code{assoc}
+You can add a value for a given key to a map with @code{assoc}.
+
+@example
+user=> (assoc @{:bolts 1088@} :camshafts 3)
+@{:camshafts 3 :bolts 1088@}
+user=> (assoc @{:camshafts 3@} :camshafts 2)
+@{:camshafts 2@}
+@end example
+
+@code{assoc} adds keys  if they aren’t present, and replaces  values if they’re
+already there.  If you associate a value onto @code{nil}, it creates a new map.
+
 
 
 
