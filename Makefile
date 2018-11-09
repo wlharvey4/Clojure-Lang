@@ -9,13 +9,14 @@ SHELL := /usr/local/bin/bash
 
 FILE  := Clojure-Lang
 ROOT  := $(PWD)
-FILES := files
+FILES := clj
 
 # DEFAULT Target
 ################
 .PHONY : TWJR JRTANGLE TANGLE JRWEAVE WEAVE TEXI INFO PDF HTML
 .PHONY : default twjr twjrkeep jrtangle tangle
 .PHONY : jrweave weave texi info pdf html newmakefile
+.PHONY : files
 
 default : TWJR
 
@@ -29,28 +30,34 @@ twjrkeep : jrtangle jrweave info pdf html
 TWJR : twjr
 twjr : twjrkeep dirclean
 
-# JRTANGLE depends upon the LODESTONE and the ROOT FILES directory;
+# JRTANGLE depends upon the LODESTONE and the ROOT/FILES directory;
 # if either is missing or out of date, then JRTANGLE will be run to
 # extract its files.
 JRTANGLE : TANGLE
 TANGLE   : jrtangle
 jrtangle : tangle
-tangle   : $(LODESTONE) $(ROOT)/$(FILES)
+tangle   : files $(LODESTONE)
+
 $(LODESTONE) : $(FILE).twjr
 	@printf "${YELLOW}Tangling $(FILE)...${CLEAR}\n"
 	@jrtangle $(FILE).twjr
 	@touch $(LODESTONE)
 	@printf "${GREEN}done tangling.${CLEAR}\n"
 
-# Extracts the source files using jrtangle
-$(ROOT)/$(FILES) :
-	@jrtangle $(FILE).twjr
-	@touch $(LODESTONE)
+# Checks for  the existence  of the ROOT/FILES  directory; extracts  files into
+# them if they don't  exist or are out of date; they must  be retouched if they
+# exist but  are out of date  because they will  not be remade or  updated when
+# files are extracted into them
+files : $(ROOT)/$(FILES)
+$(ROOT)/$(FILES) : $(FILE).twjr
+	@printf "${YELLOW}Creating files...${CLEAR}\n"
+	@touch $(FILE).twjr
+	@make $(LODESTONE)
+	@touch $(ROOT)/$(FILES)
+	@printf "${GREEN}done creating files.${CLEAR}\n"
 
-# Extracts the Makefile if necessary by tangling; everything else
-# is thereafter deleted
-newmakefile : $(LODESTONE)
-	make allclean
+# Tangles the source (to obtain a new Makefile); then cleans all
+newmakefile : $(LODESTONE) allclean
 
 # Extracts the TEXI, and updates the nodes and sections with a batch call to
 # Emacs; it depends upon TWJR

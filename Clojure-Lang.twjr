@@ -1,8 +1,8 @@
 \input texinfo   @c -*- mode: texinfo -*-
 
 @c FILE    Clojure-Lang.twjr
-@c VERSION 0.1.0
-@c DATE    2018-11-08T23:45
+@c VERSION 0.1.1
+@c DATE    2018-11-09T07:25
 @c AUTHOR  wlharvey4
 
 @c *****************************************************************************
@@ -178,7 +178,6 @@
 @end ifdocbook
 
 
-
 @c merge the function and variable indexes into the concept index
 @c do so without the code font, and in the index entries do the
 @c font management ourselves.  Also merge in the chunk definition
@@ -216,8 +215,6 @@
 @end ifnottex
 
 
-
-
 @c <------------------------------------->
 @c The initial_setup code runs as a script
 @c in a  BEGIN section  of AWK  during the
@@ -232,7 +229,7 @@
 printf "${YELLOW}In initial_setup...${BLUEBOLD}\n"
 
 ROOT="$PWD"
-FILES="files"
+FILES="clj"
 SUBDIRS="src doc tst bin"
 
 for file in ${SUBDIRS}
@@ -451,21 +448,39 @@ problems.
 
 
 
+@c -----------------------------------------------------------------------------
 
-@c =============================================================================
+@c <------------------------------------->
+@c                MENUS
 @menu
 @detailmenu
 @end detailmenu
 @end menu
-@c =============================================================================
+@c <------------------------------------->
 
 
-
-
-@c =============================================================================
+@c <------------------------------------->
+@c                 TOC
 @c @summarycontents
 @contents
-@c =============================================================================
+@c <------------------------------------->
+
+
+@c END Menus and Contents
+@c /////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN FRONT-MATTER
+@c --Forward
+@c --Preface
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -475,12 +490,16 @@ problems.
 
 
 @c *****************************************************************************
+@c                                 FORWARD
 
-@c Add these to the menu if they ever get included.
 @c @node Foreword
 @c @unnumbered Foreword
 
 
+@c END Forward
+@c /////////////////////////////////////////////////////////////////////////////
+
+
 
 
 
@@ -488,6 +507,15 @@ problems.
 
 
 @c *****************************************************************************
+@c                               PREFACE
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN Preface
+@c --Audience
+@c --Overviw
+@c --Conventions
+@c --Acknowledgements
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @node Preface
 @unnumbered Preface
@@ -568,16 +596,28 @@ in this sentence.  Finally, file names are indicated like this:
 
 
 @c -----------------------------------------------------------------------------
+
 @node Acknowledgements
 @unnumberedsec Acknowledgements
 
 Acknowledgements go here.
 
 
-
-
-@c /////////////////////////////////////////////////////////////////////////////
 @c END Preface
+@c /////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN CHAPTERS
+@c --Introduction
+@c --Chapters 1-1
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -587,6 +627,8 @@ Acknowledgements go here.
 
 
 @c *****************************************************************************
+@c                              INTRODUCTION
+
 @node Introduction
 @chapter Introduction
 
@@ -2821,15 +2863,21 @@ already there.  If you associate a value onto @code{nil}, it creates a new map.
 @url{https://clojuredocs.org/, ClojureDocs}
 
 
+@c END CHAPTERS
+@c /////////////////////////////////////////////////////////////////////////////
 
 
 
 
 
 
-@c ============================================================================
-@c APPENDICES
-@c =============================================================================
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN APPENDICES
+@c --The Makefile
+@c --Code Chunk Summaries
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -2846,6 +2894,12 @@ already there.  If you associate a value onto @code{nil}, it creates a new map.
 Some appendix here.
 
 
+@c END First Appendix
+@c /////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 
@@ -2856,6 +2910,7 @@ Some appendix here.
 @node The Makefile
 @appendix The Makefile
 @cindex makefile
+
 
 
 @(Makefile@)=
@@ -2909,7 +2964,7 @@ SHELL := /usr/local/bin/bash
 
 FILE  := Clojure-Lang
 ROOT  := $(PWD)
-FILES := files
+FILES := clj
 
 @
 
@@ -2981,6 +3036,7 @@ which  is  directly  responsible  for  producing  the  output  files.   If  the
 .PHONY : TWJR JRTANGLE TANGLE JRWEAVE WEAVE TEXI INFO PDF HTML
 .PHONY : default twjr twjrkeep jrtangle tangle
 .PHONY : jrweave weave texi info pdf html newmakefile
+.PHONY : files
 
 default : TWJR
 
@@ -3034,28 +3090,34 @@ twjrkeep : jrtangle jrweave info pdf html
 TWJR : twjr
 twjr : twjrkeep dirclean
 
-# JRTANGLE depends upon the LODESTONE and the ROOT FILES directory;
+# JRTANGLE depends upon the LODESTONE and the ROOT/FILES directory;
 # if either is missing or out of date, then JRTANGLE will be run to
 # extract its files.
 JRTANGLE : TANGLE
 TANGLE   : jrtangle
 jrtangle : tangle
-tangle   : $(LODESTONE) $(ROOT)/$(FILES)
+tangle   : files $(LODESTONE)
+
 $(LODESTONE) : $(FILE).twjr
 	@printf "${YELLOW}Tangling $(FILE)...${CLEAR}\n"
 	@jrtangle $(FILE).twjr
 	@touch $(LODESTONE)
 	@printf "${GREEN}done tangling.${CLEAR}\n"
 
-# Extracts the source files using jrtangle
-$(ROOT)/$(FILES) :
-	@jrtangle $(FILE).twjr
-	@touch $(LODESTONE)
+# Checks for  the existence  of the ROOT/FILES  directory; extracts  files into
+# them if they don't  exist or are out of date; they must  be retouched if they
+# exist but  are out of date  because they will  not be remade or  updated when
+# files are extracted into them
+files : $(ROOT)/$(FILES)
+$(ROOT)/$(FILES) : $(FILE).twjr
+	@printf "${YELLOW}Creating files...${CLEAR}\n"
+	@touch $(FILE).twjr
+	@make $(LODESTONE)
+	@touch $(ROOT)/$(FILES)
+	@printf "${GREEN}done creating files.${CLEAR}\n"
 
-# Extracts the Makefile if necessary by tangling; everything else
-# is thereafter deleted
-newmakefile : $(LODESTONE)
-	make allclean
+# Tangles the source (to obtain a new Makefile); then cleans all
+newmakefile : $(LODESTONE) allclean
 
 # Extracts the TEXI, and updates the nodes and sections with a batch call to
 # Emacs; it depends upon TWJR

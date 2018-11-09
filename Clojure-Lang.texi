@@ -5,8 +5,8 @@
 \input texinfo   @c -*- mode: texinfo -*-
 
 @c FILE    Clojure-Lang.twjr
-@c VERSION 0.1.0
-@c DATE    2018-11-08T23:45
+@c VERSION 0.1.1
+@c DATE    2018-11-09T07:25
 @c AUTHOR  wlharvey4
 
 @c *****************************************************************************
@@ -192,7 +192,6 @@
 @end ifdocbook
 
 
-
 @c merge the function and variable indexes into the concept index
 @c do so without the code font, and in the index entries do the
 @c font management ourselves.  Also merge in the chunk definition
@@ -232,8 +231,6 @@
 @i{\text\}
 @end macro
 @end ifnottex
-
-
 
 
 @c <------------------------------------->
@@ -486,8 +483,10 @@ problems.
 
 
 
+@c -----------------------------------------------------------------------------
 
-@c =============================================================================
+@c <------------------------------------->
+@c                MENUS
 @menu
 * Preface::
 * Introduction::
@@ -603,15 +602,31 @@ Code Chunk Summaries
 @end detailmenu
 @end menu
 
-@c =============================================================================
+@c <------------------------------------->
 
 
-
-
-@c =============================================================================
+@c <------------------------------------->
+@c                 TOC
 @c @summarycontents
 @contents
-@c =============================================================================
+@c <------------------------------------->
+
+
+@c END Menus and Contents
+@c /////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN FRONT-MATTER
+@c --Forward
+@c --Preface
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -621,12 +636,16 @@ Code Chunk Summaries
 
 
 @c *****************************************************************************
+@c                                 FORWARD
 
-@c Add these to the menu if they ever get included.
 @c @node Foreword
 @c @unnumbered Foreword
 
 
+@c END Forward
+@c /////////////////////////////////////////////////////////////////////////////
+
+
 
 
 
@@ -634,6 +653,15 @@ Code Chunk Summaries
 
 
 @c *****************************************************************************
+@c                               PREFACE
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN Preface
+@c --Audience
+@c --Overviw
+@c --Conventions
+@c --Acknowledgements
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @node Preface, Introduction, Top, Top
 @unnumbered Preface
@@ -714,16 +742,28 @@ in this sentence.  Finally, file names are indicated like this:
 
 
 @c -----------------------------------------------------------------------------
+
 @node Acknowledgements,  , Conventions, Preface
 @unnumberedsec Acknowledgements
 
 Acknowledgements go here.
 
 
-
-
-@c /////////////////////////////////////////////////////////////////////////////
 @c END Preface
+@c /////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN CHAPTERS
+@c --Introduction
+@c --Chapters 1-1
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -733,6 +773,8 @@ Acknowledgements go here.
 
 
 @c *****************************************************************************
+@c                              INTRODUCTION
+
 @node Introduction, Getting Started, Preface, Top
 @chapter Introduction
 
@@ -2214,13 +2256,8 @@ types.
 * Maps::
 @end menu
 
-<<<<<<< HEAD
-@node Integer Type,  , Types, Types
-@subsubsection Integer Type
-=======
-@node Integers
+@node Integers, Fractional Numbers, Types, Types
 @subsubsection Integers
->>>>>>> 6857ae83661e36fc3f7f5281f40103e2dda5d5a7
 @cindex integer type
 @cindex @file{java.lang.Long}
 @cindex Long
@@ -2346,7 +2383,7 @@ user=> Byte/MAX_VALUE
 
 @c _____________________________________
 
-@node Fractional Numbers
+@node Fractional Numbers, Mathematical Operators, Integers, Types
 @subsubsection Fractional Numbers
 @cindex fractional numbers
 @cindex floating-point numbers
@@ -2389,7 +2426,7 @@ user=> 0.99999999999999999
 
 @c _____________________________________
 
-@node Mathematical Operators
+@node Mathematical Operators, Strings, Fractional Numbers, Types
 @subsubsection Mathematical Operators
 @cindex mathemtical operators
 @cindex operators
@@ -2533,7 +2570,7 @@ false
 
 @c _____________________________________
 
-@node Strings
+@node Strings, Booleans, Mathematical Operators, Types
 @subsubsection Strings
 @cindex strings
 
@@ -2615,7 +2652,7 @@ Expressions}.
 
 @c_____________________________________
 
-@node Booleans
+@node Booleans, Symbols, Strings, Types
 @subsubsection Booleans and Logic
 @cindex boolean type
 @cindex logic
@@ -2714,7 +2751,7 @@ then meow incessantly''.
 
 @c _____________________________________
 
-@node Symbols
+@node Symbols, Keywords, Booleans, Types
 @subsubsection Symbols
 @cindex symbols
 
@@ -2756,7 +2793,7 @@ values.  That’s not the only use of symbols, but it’s the most common.
 
 @c _____________________________________
 
-@node Keywords
+@node Keywords, Lists, Symbols, Types
 @subsubsection Keywords
 @cindex Keywords
 
@@ -2781,7 +2818,7 @@ values in other data types.  We’ll learn more about keywords shortly.
 
 @c _____________________________________
 
-@node Lists
+@node Lists, Vectors, Keywords, Types
 @subsubsection Lists
 @cindex lists
 
@@ -2854,7 +2891,7 @@ vector.
 
 @c _____________________________________
 
-@node Vectors
+@node Vectors, Sets, Lists, Types
 @subsubsection Vectors
 @cindex vector
 
@@ -2967,7 +3004,7 @@ a few data-structure-specific operations.
 
 @c _____________________________________
 
-@node Sets
+@node Sets, Maps, Vectors, Types
 @subsubsection Sets
 @cindex set
 
@@ -3047,7 +3084,7 @@ user=> (set [:a :b :c])
 
 @c _____________________________________
 
-@node Maps
+@node Maps,  , Sets, Types
 @subsubsection Maps
 @cindex map
 
@@ -3133,15 +3170,21 @@ already there.  If you associate a value onto @code{nil}, it creates a new map.
 @url{https://clojuredocs.org/, ClojureDocs}
 
 
+@c END CHAPTERS
+@c /////////////////////////////////////////////////////////////////////////////
 
 
 
 
 
 
-@c ============================================================================
-@c APPENDICES
-@c =============================================================================
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN APPENDICES
+@c --The Makefile
+@c --Code Chunk Summaries
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -3158,6 +3201,12 @@ already there.  If you associate a value onto @code{nil}, it creates a new map.
 Some appendix here.
 
 
+@c END First Appendix
+@c /////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 
@@ -3168,6 +3217,7 @@ Some appendix here.
 @node The Makefile, Code Chunk Summaries, First appendix, Top
 @appendix The Makefile
 @cindex makefile
+
 
 
 @need 400
@@ -3264,7 +3314,7 @@ SHELL := /usr/local/bin/bash
 
 FILE  := Clojure-Lang
 ROOT  := $(PWD)
-FILES := files
+FILES := clj
 
 @end example
 @iftex
@@ -3350,6 +3400,7 @@ which  is  directly  responsible  for  producing  the  output  files.   If  the
 .PHONY : TWJR JRTANGLE TANGLE JRWEAVE WEAVE TEXI INFO PDF HTML
 .PHONY : default twjr twjrkeep jrtangle tangle
 .PHONY : jrweave weave texi info pdf html newmakefile
+.PHONY : files
 
 default : TWJR
 
@@ -3417,28 +3468,34 @@ twjrkeep : jrtangle jrweave info pdf html
 TWJR : twjr
 twjr : twjrkeep dirclean
 
-# JRTANGLE depends upon the LODESTONE and the ROOT FILES directory;
+# JRTANGLE depends upon the LODESTONE and the ROOT/FILES directory;
 # if either is missing or out of date, then JRTANGLE will be run to
 # extract its files.
 JRTANGLE : TANGLE
 TANGLE   : jrtangle
 jrtangle : tangle
-tangle   : $(LODESTONE) $(ROOT)/$(FILES)
+tangle   : files $(LODESTONE)
+
 $(LODESTONE) : $(FILE).twjr
     @@printf "$@{YELLOW@}Tangling $(FILE)...$@{CLEAR@}\n"
     @@jrtangle $(FILE).twjr
     @@touch $(LODESTONE)
     @@printf "$@{GREEN@}done tangling.$@{CLEAR@}\n"
 
-# Extracts the source files using jrtangle
-$(ROOT)/$(FILES) :
-    @@jrtangle $(FILE).twjr
-    @@touch $(LODESTONE)
+# Checks for  the existence  of the ROOT/FILES  directory; extracts  files into
+# them if they don't  exist or are out of date; they must  be retouched if they
+# exist but  are out of date  because they will  not be remade or  updated when
+# files are extracted into them
+files : $(ROOT)/$(FILES)
+$(ROOT)/$(FILES) : $(FILE).twjr
+    @@printf "$@{YELLOW@}Creating files...$@{CLEAR@}\n"
+    @@touch $(FILE).twjr
+    @@make $(LODESTONE)
+    @@touch $(ROOT)/$(FILES)
+    @@printf "$@{GREEN@}done creating files.$@{CLEAR@}\n"
 
-# Extracts the Makefile if necessary by tangling; everything else
-# is thereafter deleted
-newmakefile : $(LODESTONE)
-    make allclean
+# Tangles the source (to obtain a new Makefile); then cleans all
+newmakefile : $(LODESTONE) allclean
 
 # Extracts the TEXI, and updates the nodes and sections with a batch call to
 # Emacs; it depends upon TWJR
