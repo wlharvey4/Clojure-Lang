@@ -4,38 +4,109 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input texinfo   @c -*- mode: texinfo -*-
 
+@c FILE    Clojure-Lang.twjr
+@c VERSION 0.1.0
+@c DATE    2018-11-08T23:45
+@c AUTHOR  wlharvey4
+
 @c *****************************************************************************
-@c %**start of header (This is for running Texinfo on a region.)
+@c %**start of header
 
 @setfilename  Clojure-Lang.info
 @settitle     Clojure Language Reference
-@include      my-bib-macros.texi
-@mybibusetable{Bibliography}
 
-@c %**end of header (This is for running Texinfo on a region.)
+@c %**end of header
 
 @c Extra indices added by jrweave
 @defindex cd   @c chunk definition
 @defindex cr   @c chunk reference
 @c *****************************************************************************
 
-@c VERSION 0.0.7
-@c DATE    2018-10-29T15:10
-
-@c *****************************************************************************
-@c DOCUMENT VARIABLES
-@c *****************************************************************************
-
 @c -----------------------------------------------------------------------------
 @set TITLE      Clojure Language Reference
 @set SHORTTITLE Clojure Lang
-@set EDITION 0.1
-@set UPDATE-MONTH OCTOBER, 2018 @c goes in the subtitle
 @set AUTHOR WLHarvey4
+@set EDITION 0.1
+@set UPDATE-MONTH NOVEMBER, 2018 @c goes in the subtitle
+@set COPYRIGHT-YEAR 2018
+@set COPYRIGHT-HOLDER WLHarvey4
 @set ADDRESS1 Address Line 1
 @set ADDRESS2 Address Line 2
-@set COPYRIGHT 2018
 @c -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+@c *****************************************************************************
+@c BIBCITE MACROS
+@c *****************************************************************************
+
+@c need to load macros before header
+@macro mybibsetrefnode{node}
+@set mybibrefnode \node\
+@end macro
+
+@macro mybibnode{}
+@value{mybibrefnode}
+@end macro
+
+@macro mybibusetable{node}
+@set mybibtable true
+@ifset mybiblist
+@clear mybiblist
+@end ifset
+@mybibsetrefnode{\node\}
+@end macro
+
+@macro mybibuselist{node}
+@set mybiblist true
+@ifset mybibtable
+@clear mybibtable
+@end ifset
+@mybibsetrefnode{\node\}
+@end macro
+
+@macro mybibcite{ref}
+@inlineifclear{mybibrefnode, @mybibmakeref{mybibsetrefnode was not used, \ref\}}
+@ifset mybibrefnode
+@mybibmakeref{@mybibnode{}, \ref\}
+@end ifset
+
+@end macro
+
+@macro mybibmakeref{node, ref}
+(See item @cite{\ref\} in @ref{\ref\,,\node\}.)
+@end macro
+
+@macro mybibitem{ref}
+@ifclear mybiblist
+@ifclear mybibtable
+@set mybiblist true
+@end ifclear
+@end ifclear
+
+@ifset mybiblist
+@item
+@anchor{\ref\}[\ref\]
+@end ifset
+
+@ifset mybibtable
+@item @anchor{\ref\}\ref\ ---
+@end ifset
+
+@end macro
+
+@mybibusetable{Bibliography}
+
+@c /////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 
@@ -44,7 +115,6 @@
 @c FINALOUT / DRAFT / FORPRINT
 @c *****************************************************************************
 
-@c -----------------------------------------------------------------------------
 @set      DRAFT @i{DRAFT} @c when set, print DRAFT in heading
 @c @clear DRAFT  @c when clear, don't print DRAFT in heading
 @clear  FINALOUT @c when clear, show black boxes for overfull lines
@@ -52,6 +122,7 @@
 @clear  FORPRINT @c when clear, PDF output is for viewing, not printing
 @c @set FORPRINT @c when set, PDF output is for printing, not viewing
 
+@c -----------------------------------------------------------------------------
 @iftex
 @ifset FINALOUT @c don't show black boxes for final printout
 @finalout
@@ -77,7 +148,12 @@
 \global\urefurlonlylinktrue
 @end tex
 @end ifclear
+
 @c -----------------------------------------------------------------------------
+
+
+
+
 
 
 
@@ -86,7 +162,6 @@
 @c SECTIONING
 @c *****************************************************************************
 
-@c -----------------------------------------------------------------------------
 @iftex
 @set DOCUMENT book
 @set CHAPTER chapter
@@ -115,7 +190,25 @@
 @set SECTION section
 @set SUBSECTION subsection
 @end ifdocbook
-@c -----------------------------------------------------------------------------
+
+
+
+@c merge the function and variable indexes into the concept index
+@c do so without the code font, and in the index entries do the
+@c font management ourselves.  Also merge in the chunk definition
+@c and reference entries, which jrweave creates for us.
+@ifnothtml
+@synindex fn cp
+@synindex vr cp
+@synindex cd cp
+@synindex cr cp
+@end ifnothtml
+
+@c /////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 
@@ -124,7 +217,6 @@
 @c SPECIAL TEXIWEBJR COMMANDS
 @c *****************************************************************************
 
-@c -----------------------------------------------------------------------------
 @c Change how xref titles are quoted.
 @tex
 \gdef\xrefprintnodename#1{``#1''}
@@ -140,34 +232,82 @@
 @i{\text\}
 @end macro
 @end ifnottex
-@c -----------------------------------------------------------------------------
 
 
 
 
-@c *****************************************************************************
-@c INDEX COMMANDS
-@c *****************************************************************************(
+@c <------------------------------------->
+@c The initial_setup code runs as a script
+@c in a  BEGIN section  of AWK  during the
+@c tangling  phase  before any  files  are
+@c extracted.   Here  create  a  directory
+@c structure for  project files,  plus any
+@c other initialization that might need to
+@c be   done.    Files  are   moved   into
+@c directories in a @post_create command.
 
-@c merge the function and variable indexes into the concept index
-@c do so without the code font, and in the index entries do the
-@c font management ourselves.  Also merge in the chunk definition
-@c and reference entries, which jrweave creates for us.
-@ifnothtml
-@synindex fn cp
-@synindex vr cp
-@synindex cd cp
-@synindex cr cp
-@end ifnothtml
+@c <------------------------------------->
 
 
+@c END Special TexiwebJr Commands
+@c /////////////////////////////////////////////////////////////////////////////
 
 
-@c *****************************************************************************
+
+
+
+
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN PRINTED MATTER
+@c --COPYING
+@c --FRONT MATTER
+@c   **TITLE PAGES
+@c     ..Short Title
+@c     ..Title Page
+@c     ..Copyright Page
+@c --MAIN MATTER
+@c   **Top
+@c     --- unpaginated ---
+@c     ..General Introduction
+@c     ..Menus
+@c     ..Table of Contents
+@c     --- paginated --- unnumbered ---
+@c     ..Front Matter
+@c       ~~Forward
+@c       ~~Preface
+@c     --- paginated --- numbered ---
+@c     ..Main Matter
+@c       ~~Chapters
+@c         >>Sections
+@c           ^^Subsections
+@c             ##Subsubsections
+@c     --- paginated --- lettered ---
+@c       ~~Appendices
+@c --BACK MATTER
+@c   --- paginated --- unnumbered ---
+@c   **Lists (Unnumbered)
+@c     ..Bibliography
+@c     ..Tables
+@c     ..Indices
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN COPYING
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 @copying
-@c *****************************************************************************
 
-@ -----------------------------------------------------------------------------
+@c <------------------------------------->
 @docbook
 <para>Published by:</para>
 
@@ -182,16 +322,16 @@ URL: <ulink url="http://www.example.com/">http://www.example.com/</ulink></liter
 Full name here
 All Rights Reserved.</literallayout>
 @end docbook
-@c -----------------------------------------------------------------------------
+@c <------------------------------------->
 
 
-@c -----------------------------------------------------------------------------
+@c <------------------------------------->
 @ifnotdocbook
 Copyright @copyright{} @value{COPYRIGHT} @*
 @value{AUTHOR} @*
 All Rights Reserved.
 @end ifnotdocbook
-@c -----------------------------------------------------------------------------
+@c <------------------------------------->
 
 
 @sp 1
@@ -202,12 +342,21 @@ the conditions of the GNU General Public License, version 3.
 This is Edition @value{EDITION} of @cite{@value{TITLE}}.
 
 @end copying
+
 @c /////////////////////////////////////////////////////////////////////////////
 
 
 
 
-@c =============================================================================
+
+
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BDGIN TITLEPAGE
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 @c Let texinfo.tex give us full section titles
 @xrefautomaticsectiontitle on
 
@@ -241,7 +390,6 @@ This is Edition @value{EDITION} of @cite{@value{TITLE}}.
 @c End extra commands added by jrweave
 
 @titlepage
-@c =============================================================================
 
 @c Uncomment this if it's ever printed as a real book(let).
 @c @shorttitlepage @value{SHORTTITLE}
@@ -250,6 +398,7 @@ This is Edition @value{EDITION} of @cite{@value{TITLE}}.
 @subtitle @value{UPDATE-MONTH}
 @author @value{AUTHOR} @c Full Name here
 
+@c <------------------------------------->
 @ifnotdocbook
 @c Include the Distribution inside the titlepage environment so
 @c that headings are turned off.  Headings on and off do not work.
@@ -267,9 +416,16 @@ URL: @url{http://www.example.com/} @*
 
 @insertcopying
 @end ifnotdocbook
+@c <------------------------------------->
 
 @end titlepage
+
 @c /////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 
 
@@ -283,6 +439,7 @@ URL: @url{http://www.example.com/} @*
 @oddheading  @strong{@thischapter} @| @value{DRAFT} @| @thispage
 @end iftex
 
+@c /////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -290,9 +447,13 @@ URL: @url{http://www.example.com/} @*
 
 
 
-@c #############################################################################
-@c BEGIN
-@c #############################################################################
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@c BEGIN TOP
+@c --General Introduction
+@c --Main Menu
+@c --Table of Contents
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -306,13 +467,9 @@ URL: @url{http://www.example.com/} @*
 @ifnotxml
 
 @c =============================================================================
-@node Top
+@node Top, Preface, (dir), (dir)
 @top The CLOJURE Programming Language
 @c =============================================================================
-
-@c Preface node should come right after the Top
-@c node, in `unnumbered' sections, then the introductory chapter.
-@c Licensing nodes are appendices, they're not central to TexiWebJr.
 
 This  file documents  the programming  language CLOJURE,  and provides  example
 source code that can be extracted and run.
@@ -321,7 +478,6 @@ source code that can be extracted and run.
 clojure: warning: Your terminal 'dumb' is not fully functional, expect some
 problems.
 @end quotation
-
 
 @insertcopying
 @end ifnotxml
@@ -341,7 +497,7 @@ problems.
 * First appendix::
 * The Makefile::
 * Code Chunk Summaries::
-* Bibliography::
+* @mybibnode{}::
 * List of Tables::
 * Concept Index::
 
@@ -426,6 +582,7 @@ The Makefile
 * Makefile TWJR Targets::
 * Makefile Clean Targets::
 * Makefile Example Targets::
+* Makefile Applications::
 
 Code Chunk Summaries
 
@@ -468,7 +625,7 @@ Code Chunk Summaries
 
 @c *****************************************************************************
 
-@node Preface
+@node Preface, Introduction, Top, Top
 @unnumbered Preface
 
 Text here.
@@ -484,7 +641,7 @@ Text here.
 
 
 @c -----------------------------------------------------------------------------
-@node Audience
+@node Audience, Overview, Preface, Preface
 @unnumberedsec Intended Audience
 
 Audience text here.
@@ -493,7 +650,7 @@ Audience text here.
 
 
 @c -----------------------------------------------------------------------------
-@node Overview
+@node Overview, Conventions, Audience, Preface
 @unnumberedsec What Is Covered
 
 Overview text and chapter by chapter description here.
@@ -502,7 +659,7 @@ Overview text and chapter by chapter description here.
 
 
 @c -----------------------------------------------------------------------------
-@node Conventions
+@node Conventions, Acknowledgements, Overview, Preface
 @unnumberedsec Typographical Conventions
 
 @c Copied mostly verbatim from the gawk manual.
@@ -547,7 +704,7 @@ in this sentence.  Finally, file names are indicated like this:
 
 
 @c -----------------------------------------------------------------------------
-@node Acknowledgements
+@node Acknowledgements,  , Conventions, Preface
 @unnumberedsec Acknowledgements
 
 Acknowledgements go here.
@@ -566,7 +723,7 @@ Acknowledgements go here.
 
 
 @c *****************************************************************************
-@node Introduction
+@node Introduction, Getting Started, Preface, Top
 @chapter Introduction
 
 CLOJURE's home page is at: @url{https://clojure.org/index}.
@@ -624,7 +781,7 @@ correct, multithreaded designs.
 * Other Hosts::
 @end menu
 
-@node Rationale for Clojure
+@node Rationale for Clojure, Dynamic Functional Lisp, Introduction, Introduction
 @section Rationale for Clojure
 
 @heading Rationale
@@ -694,7 +851,7 @@ robust --- practical --- fast
 
 @c -----------------------------------------------------------------------------
 
-@node Dynamic Functional Lisp
+@node Dynamic Functional Lisp, Clojure Features, Rationale for Clojure, Introduction
 @section CLOJURE Is Dynamic Functional Lisp
 
 CLOJURE is  a Lisp  not constrained  by backwards compatibility;  it is  also a
@@ -725,7 +882,7 @@ Dynamic polymorphism
 
 @c -----------------------------------------------------------------------------
 
-@node Clojure Features
+@node Clojure Features, Other Hosts, Dynamic Functional Lisp, Introduction
 @section Clojure Features
 @cindex features
 
@@ -744,7 +901,7 @@ powerful tool.
 * Hosted On The JVM::
 @end menu
 
-@node Dynamic Development
+@node Dynamic Development, Functional Programming, Clojure Features, Clojure Features
 @subsection Dynamic Development
 @cindex dynamic
 
@@ -782,7 +939,7 @@ compiled to JVM bytecode on the fly.
 
 @c .....................................
 
-@node Functional Programming
+@node Functional Programming, Dialect of Lisp, Dynamic Development, Clojure Features
 @subsection Functional Programming
 @cindex functional
 
@@ -894,7 +1051,7 @@ are replaced/implemented via recursive function calls.
 
 @c .....................................
 
-@node Dialect of Lisp
+@node Dialect of Lisp, Runtime Polymorphism, Functional Programming, Clojure Features
 @subsection Dialect of Lisp
 @cindex dialect of Lisp
 
@@ -943,7 +1100,7 @@ built-in primitives but macros just like users can define.
 
 @c .....................................
 
-@node Runtime Polymorphism
+@node Runtime Polymorphism, Concurrent Programming, Dialect of Lisp, Clojure Features
 @subsection Runtime Polymorphism
 
 Systems  that   utilize  runtime   polymorphism  are   easier  to   change  and
@@ -1014,7 +1171,7 @@ native Java performance of polymorphic method calls.
 
 @c .....................................
 
-@node Concurrent Programming
+@node Concurrent Programming, Hosted On The JVM, Runtime Polymorphism, Clojure Features
 @subsection Concurrent Programming
 @cindex concurrent programming
 
@@ -1065,7 +1222,7 @@ without explicit locking.
 
 @c .....................................
 
-@node Hosted On The JVM
+@node Hosted On The JVM,  , Concurrent Programming, Clojure Features
 @subsection Hosted On The JVM
 
 Clojure is designed to  be a hosted language, sharing the  JVM type system, GC,
@@ -1098,7 +1255,7 @@ Tapping into a Java class is as easy as:
 
 @c -----------------------------------------------------------------------------
 
-@node Other Hosts
+@node Other Hosts,  , Clojure Features, Introduction
 @section Other Hosts
 
 
@@ -1109,7 +1266,7 @@ Tapping into a Java class is as easy as:
 * Closure CLR::
 @end menu
 
-@node ClojureScript
+@node ClojureScript, Closure CLR, Other Hosts, Other Hosts
 @subsection ClojureScript
 @cindex clojurescript
 
@@ -1142,7 +1299,7 @@ when using many libraries.
 
 @c .....................................
 
-@node Closure CLR
+@node Closure CLR,  , ClojureScript, Other Hosts
 @subsection Closure CLR
 
 @url{https://clojure.org/about/clojureclr, ClosureCLR}
@@ -1163,7 +1320,7 @@ Language Runtime (DLR).
 
 @c *****************************************************************************
 
-@node Getting Started
+@node Getting Started, Resources, Introduction, Top
 @chapter Getting Started
 @cindex getting started
 
@@ -1177,7 +1334,7 @@ Language Runtime (DLR).
 * CLI Guide::
 @end menu
 
-@node New To Clojure
+@node New To Clojure, CLI Guide, Getting Started, Getting Started
 @section New To Clojure
 
 New to Clojure  and not sure where to  start? Here are a few  good resources to
@@ -1217,7 +1374,7 @@ Run Clojure Code In Your Browser}
 
 @c -----------------------------------------------------------------------------
 
-@node CLI Guide
+@node CLI Guide,  , New To Clojure, Getting Started
 @section CLI Guide
 @cindex CLI Guide
 
@@ -1248,7 +1405,7 @@ using Clojure and Java libraries
 * Using Local Libraries::
 @end menu
 
-@node Installing CLI Tools
+@node Installing CLI Tools, Build Tools, CLI Guide, CLI Guide
 @subsection Installing CLI Tools
 @cindex install cli tools
 @cindex command line tools
@@ -1303,7 +1460,7 @@ user=>
 
 @c .....................................
 
-@node Build Tools
+@node Build Tools, Run a REPL, Installing CLI Tools, CLI Guide
 @subsection Build Tools
 @cindex build tools
 
@@ -1319,7 +1476,7 @@ build tools are
 
 @c .....................................
 
-@node Run a REPL
+@node Run a REPL, Working With Deps, Build Tools, CLI Guide
 @subsection Run a REPL
 @cindex REPL
 @cindex run a Clojure REPL
@@ -1344,7 +1501,7 @@ them.
 
 @c .....................................
 
-@node Working With Deps
+@node Working With Deps, Write A Program With Deps, Run a REPL, CLI Guide
 @subsection Working With Dependencies (Deps)
 @cindex deps
 @cindex dependencies
@@ -1423,7 +1580,7 @@ and explore Clojure or Java libraries.
 
 @c .....................................
 
-@node Write A Program With Deps
+@node Write A Program With Deps, Using Local Libraries, Working With Deps, CLI Guide
 @subsection Write A Program Using A Dependency
 @cindex deps
 @cindex @file{deps.edn}
@@ -1510,7 +1667,7 @@ target @code{hello-world}.
 * Makefile Target for Hello World::
 @end menu
 
-@node Makefile Target for Hello World
+@node Makefile Target for Hello World,  , Write A Program With Deps, Write A Program With Deps
 @appendixsubsubsec Makefile Target for Hello World
 
 @need 400
@@ -1548,7 +1705,7 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @c .....................................
 
-@node Using Local Libraries
+@node Using Local Libraries,  , Write A Program With Deps, CLI Guide
 @subsection Using Local Libraries
 @cindex local libraries
 @cindex local coordinates
@@ -1685,7 +1842,7 @@ Hello world, the time is 02:07 PM
 * Makefile Hello Time Target::
 @end menu
 
-@node Makefile Hello Time Target
+@node Makefile Hello Time Target,  , Using Local Libraries, Using Local Libraries
 @appendixsubsubsec Makefile Hello Time Target
 
 @need 400
@@ -1731,7 +1888,7 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @c *****************************************************************************
 
-@node Resources
+@node Resources, Clojure API Documentation, Getting Started, Top
 @chapter Resources
 @cindex resources
 
@@ -1745,7 +1902,7 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 * Clojure From The Ground Up::
 @end menu
 
-@node Community Resources
+@node Community Resources, Learn Clojure, Resources, Resources
 @section Community Resources
 @cindex resources, community
 
@@ -1759,14 +1916,14 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 * Community Tutorials::
 @end menu
 
-@node Community Discussion
+@node Community Discussion, Community Tutorials, Community Resources, Community Resources
 @subsection Community Discussion
 @cindex resources, community discussion
 
 
 @c .....................................
 
-@node Community Tutorials
+@node Community Tutorials,  , Community Discussion, Community Resources
 @subsection Community Tutorials
 @cindex resources, tutorials
 @cindex tutorials
@@ -1776,7 +1933,7 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @c -----------------------------------------------------------------------------
 
-@node Learn Clojure
+@node Learn Clojure, Clojure From The Ground Up, Community Resources, Resources
 @section Learn Clojure
 @cindex learn clojure
 
@@ -1787,7 +1944,7 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @c -----------------------------------------------------------------------------
 
-@node Clojure From The Ground Up
+@node Clojure From The Ground Up,  , Learn Clojure, Resources
 @section Clojure From The Ground Up
 @cindex from the ground up
 
@@ -1803,7 +1960,7 @@ Clojure From The Ground Up}
 * Types::
 @end menu
 
-@node Welcome
+@node Welcome, Some Preliminaries, Clojure From The Ground Up, Clojure From The Ground Up
 @subsection Welcome To Clojure From The Ground Up
 @cindex welcome
 
@@ -1868,7 +2025,7 @@ through hoops to achieve performance comparable  with Java.
 
 @c .....................................
 
-@node Some Preliminaries
+@node Some Preliminaries, Types, Welcome, Clojure From The Ground Up
 @subsection Some Preliminaries
 
 @table @b
@@ -2003,7 +2160,7 @@ expressions.  Lisp simply makes it explicit.
 
 @c .....................................
 
-@node Types
+@node Types,  , Some Preliminaries, Clojure From The Ground Up
 @subsection Types
 @cindex type
 
@@ -2037,7 +2194,7 @@ types.
 * Integer Type::
 @end menu
 
-@node Integer Type
+@node Integer Type,  , Types, Types
 @subsubsection Integer Type
 @cindex integer type
 @cindex @file{java.lang.Long}
@@ -2168,7 +2325,7 @@ user=> Byte/MAX_VALUE
 
 @c *****************************************************************************
 
-@node Clojure API Documentation
+@node Clojure API Documentation, First appendix, Resources, Top
 @chapter Clojure API Documentation
 @cindex api
 
@@ -2202,7 +2359,7 @@ user=> Byte/MAX_VALUE
 
 @c *****************************************************************************
 
-@node First appendix
+@node First appendix, The Makefile, Clojure API Documentation, Top
 @appendix First Appendix Title
 
 Some appendix here.
@@ -2213,8 +2370,9 @@ Some appendix here.
 
 
 @c *****************************************************************************
+@c                              THE MAKEFILE
 
-@node The Makefile
+@node The Makefile, Code Chunk Summaries, First appendix, Top
 @appendix The Makefile
 @cindex makefile
 
@@ -2226,6 +2384,7 @@ Some appendix here.
 @crindex @r{<@i{Makefile---TWJR Targets}>}, use
 @crindex @r{<@i{Makefile---Clean Targets}>}, use
 @crindex @r{<@i{Makefile---Example Targets}>}, use
+@crindex @r{<@i{Makefile---Applications}>}, use
 @cdindex @r{@{@file{Makefile}@}}, definition
 @noindent
 @r{@{@file{Makefile}@}} @equiv{}
@@ -2238,6 +2397,7 @@ Some appendix here.
 @r{<@i{Makefile---TWJR Targets}>}
 @r{<@i{Makefile---Clean Targets}>}
 @r{<@i{Makefile---Example Targets}>}
+@r{<@i{Makefile---Applications}>}
 
 @end example
 @iftex
@@ -2248,6 +2408,7 @@ Some appendix here.
 The following table lists called chunk definition points.
 @multitable @columnfractions .35 .65
 @headitem Chunk name @tab First definition point
+@item @r{<@i{Makefile---Applications}>} @tab See @ref{Makefile---Applications}.
 @item @r{<@i{Makefile---Clean Targets}>} @tab See @ref{Makefile---Clean-Targets}.
 @item @r{<@i{Makefile---Default Target}>} @tab See @ref{Makefile---Default-Target}.
 @item @r{<@i{Makefile---Example Targets}>} @tab See @ref{Makefile---Example-Targets-1}.
@@ -2269,10 +2430,32 @@ The following table lists called chunk definition points.
 * Makefile TWJR Targets::
 * Makefile Clean Targets::
 * Makefile Example Targets::
+* Makefile Applications::
 @end menu
 
-@node Makefile Variable Definitions
+@node Makefile Variable Definitions, Makefile Default Target, The Makefile, The Makefile
 @appendixsec Makefile Variable Definitions
+
+The @env{SHELL} variable is included because some shell commands depend upon
+Bash version 4, which is not native on my system.
+
+The @env{ROOT} variable is designed to allow you to to extract the source files
+(not the @acronym{TEXI}, @acronym{INFO}, @acronym{PDF} or @acronym{HTML} files,
+but  the  programs defined  inside  the  @acronym{TWJR}  file) to  a  directory
+structure outside of the your  ``present working directory'' (@env{PWD}) should
+that be something you want to do, i.e., for production purposes.
+
+The @code{FILE} variable  is the name of this source  @code{TWJR} file, without
+extension.
+
+The @code{FILES} variable is the name of  the root directory for the files that
+are extracted during the @emph{tangling} phase.  This directory goes underneath
+the @file{ROOT} directory.  Feel free to name this whatever you want.
+
+The @code{LODESTONE}  variable is an empty  reference file that is  used solely
+for its  modification time  to help  the Makefile  determine when  to recompile
+(i.e., @emph{tangle} and @emph{weave}) the  source @file{TWJR} file.  It should
+not be changed or otherwise touched (pun intended).
 
 @need 400
 @anchor{Makefile---Variable-Definitions}
@@ -2282,9 +2465,13 @@ The following table lists called chunk definition points.
 @example
 # VARIABLE DEFINITIONS
 ######################
+LODESTONE := .lodestone
+
+SHELL := /usr/local/bin/bash
 
 FILE  := Clojure-Lang
-SHELL := /bin/bash
+ROOT  := $(PWD)
+FILES := files
 
 @end example
 @iftex
@@ -2302,25 +2489,62 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @c -----------------------------------------------------------------------------
 
-@node Makefile Default Target
+@node Makefile Default Target, Makefile TWJR Targets, Makefile Variable Definitions, The Makefile
 @appendixsec Default Target
 @cindex default target
 
-The @code{default} target processes the  @code{TEXI} source file into an
-@code{INFO} file,  a @code{PDF} document,  and an @code{HTML}  web site.
-This process  depepnds upon the  @code{TEXI} file having  been generated
-from the @code{TWJR} file and its menus and nodes updated first.
+The @code{default} target  extracts all source files and moves  them into their
+proper  directories,  and  processes  the   @code{TEXI}  source  file  into  an
+@code{INFO}  file, a  @code{PDF} document,  and an  @code{HTML} web  site. This
+process automatically updates the TEXI's nodes and sectioning commands prior to
+generating  the   INFO,  PDF,  and   HTML  documents.    What  used  to   be  a
+manually-intensive process is now completely  automated through a Makefile that
+is extracted from the @code{TWJR}  source.
 
-The  target  @code{TWJR}  will   run  both  commands  @command{jrtangle}
-(producing code  output) and @command{jrweave}  (producing documentation
-source code  output) on the  @code{TWJRJ} source code, while  the target
-@code{WEAVE} (or  alternatively @code{TEXI})  will run just  the command
-@command{jrweave} on the @file{TWJR} file.
+This  automated  process  depends   upon  the  programmer's  system  containing
+@file{GNU   AWK}  (for   the   primary  literate   programming  operations   of
+@emph{tangling}   and   @emph{weaving}@footnote{No  other   implementation   of
+@file{AWK}  will  work}),   @file{make}  (to  control  the   build  and  output
+processes@footnote{While I haven't tested it, just about any @file{make} should
+work}),  @file{Texinfo} of  at least  version 6.5  (for the  processing of  the
+@file{TEXI} output file), @file{makeinfo} (to produce the @file{INFO} file from
+the @file{TEXI}  file), and @file{Emacs}  (for the automatic updating  of nodes
+and sectioning  command@footnote{Again, while I  haven't tested it,  just about
+any @file{Emacs}  should work}).   With these  dependencies, everything  can be
+compiled with a single call to @command{make} with no argument:
 
-In either  case, the  documentation source  code (the  @file{TEXI} file)
-will need  to be  updated, which  involves updating  its menus  and node
-links.   You  may then  run  the  @code{default} target,  producing  the
-@acronym{INFO}, @acronym{PDF}, and @acronym{HTML} files.
+@example
+$ make
+@end example
+
+Individual files and documents can also be targeted with simple calls such as:
+
+@example
+$ make html
+
+$ make openhtml
+
+$ make pdf
+
+$ make openpdf
+
+$make info
+
+$ make openinfo
+
+$ make distclean
+
+$ make allclean
+@end example
+
+@noindent and so forth (just name a few).
+
+The target  @code{twjr} is  the default, and  does everything  explicitly.  The
+target @code{weave}  (or alternatively @code{texi})  will run just  the command
+@command{jrweave}  on the  @file{TWJR} file  to produce  the @file{TEXI}  file,
+which  is  directly  responsible  for  producing  the  output  files.   If  the
+@file{TWJR}  source  file has  been  modified,  then @command{maked}  will  run
+@command{jrtangle} first to update all source documents.
 
 @need 400
 @anchor{Makefile---Default-Target}
@@ -2330,9 +2554,11 @@ links.   You  may then  run  the  @code{default} target,  producing  the
 @example
 # DEFAULT Target
 ################
-.PHONY : TWJR TANGLE WEAVE TEXI INFO PDF HTML
-.PHONY : default twjr tangle jrtangle weave texi info pdf html
-default : INFO PDF HTML
+.PHONY : TWJR JRTANGLE TANGLE JRWEAVE WEAVE TEXI INFO PDF HTML
+.PHONY : default twjr twjrkeep jrtangle tangle
+.PHONY : jrweave weave texi info pdf html newmakefile
+
+default : TWJR
 
 @end example
 @iftex
@@ -2350,15 +2576,37 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @c -----------------------------------------------------------------------------
 
-
-@node Makefile TWJR Targets
+@node Makefile TWJR Targets, Makefile Clean Targets, Makefile Default Target, The Makefile
 @appendixsec TWJR Targets
 @cindex TWJR targets
 
 These targets are all related to processing the main source @acronym{TWJR} file
-in  some  way.   The  target  @code{twjr} ``tangles  and  weaves''  the  source
-document.     @code{info}    runs     @command{makeinfo},    @code{pdf}    runs
-@command{pdftexi2dvi}, and @code{html} runs @command{makeinfo --html}.
+in some  way. The @file{make} target  @command{twjr} is the default  target and
+runs each of the processes  @command{jrtangle} and @command{jrweave} to produce
+source files,  a @acronym{TEXI} file,  an @acronym{INFO} file,  a @acronym{PDF}
+document, and an @acronym{HTML} web site.  It only sources what is necessary as
+@file{make} is designed to do.  Note that at this time, @emph{weaving} includes
+automatic  menu and  node  updating  of the  @acronym{TEXI}  file,  so that  an
+@acronym{INFO} file  can also be  generated without needing to  manually update
+the  @acronym{TEXI} file  first  as used  to be  the  case. @file{make}  target
+@code{info}     runs     @command{makeinfo},     target     @code{pdf}     runs
+@command{pdftexi2dvi}, and target @code{html} runs @command{makeinfo --html}.
+
+The default @file{twjr} target deletes all extraneous build and log files prior
+to finishing.   If you want  to retain  the build and  log files, then  run the
+target @file{twjrkeep} instead.
+
+The  file  @file{.lodestone}   is  used  to  set  a  reference   time  for  the
+@acronym{TWJR} file,  so that  if the @acronym{TWJR}  file changes,  new source
+documents will be generated; otherwise, it  will simply be left alone. In other
+words, if @file{.lodestone}  is older than @file{.twjr},  then @file{.twjr} has
+been modified, and it should be @emph{tangled} and @emph{woven} first.  If it is
+newer, then @command{make} will not recompile.
+
+Should the @file{Makefile}  portion of the @file{TWJR} be modified,  then it is
+important to  obtain a fresh copy  of the @file{Makefile} prior  to running any
+target; therefore,  use the target  @command{make newmakefile} first,  then run
+any desired target.
 
 @need 400
 @anchor{Makefile---TWJR-Targets}
@@ -2368,41 +2616,92 @@ document.     @code{info}    runs     @command{makeinfo},    @code{pdf}    runs
 @example
 # TWJR TARGETS
 ##############
+
+# Process everything; don't remove any build or log files;
+twjrkeep : jrtangle jrweave info pdf html
+
+# Process everything; remove build files and logs.
 TWJR : twjr
-twjr : distclean tangle weave
+twjr : twjrkeep dirclean
 
-TANGLE : tangle
-tangle : jrtangle
-jrtangle : 
-    jrtangle $(FILE).twjr
+# JRTANGLE depends upon the LODESTONE and the ROOT FILES directory;
+# if either is missing or out of date, then JRTANGLE will be run to
+# extract its files.
+JRTANGLE : TANGLE
+TANGLE   : jrtangle
+jrtangle : tangle
+tangle   : $(LODESTONE) $(ROOT)/$(FILES)
+$(LODESTONE) : $(FILE).twjr
+    @@printf "$@{YELLOW@}Tangling $(FILE)...$@{CLEAR@}\n"
+    @@jrtangle $(FILE).twjr
+    @@touch $(LODESTONE)
+    @@printf "$@{GREEN@}done tangling.$@{CLEAR@}\n"
 
-WEAVE : weave
+# Extracts the source files using jrtangle
+$(ROOT)/$(FILES) :
+    @@jrtangle $(FILE).twjr
+    @@touch $(LODESTONE)
+
+# Extracts the Makefile if necessary by tangling; everything else
+# is thereafter deleted
+newmakefile : $(LODESTONE)
+    make allclean
+
+# Extracts the TEXI, and updates the nodes and sections with a batch call to
+# Emacs; it depends upon TWJR
+JRWEAVE : WEAVE
+WEAVE   : jrweave
+jrweave : weave
 weave : TEXI
 TEXI  : texi
 texi  : $(FILE).texi
 $(FILE).texi : $(FILE).twjr
-    jrweave $(FILE).twjr > $(FILE).texi
+    @@printf "$@{YELLOW@}Weaving $(FILE)...$@{CLEAR@}\n"
+    @@jrweave $(FILE).twjr > $(FILE).texi
+    @@printf "$@{GREEN@}done weaving.$@{CLEAR@}\n";
+    @@printf "$@{YELLOW@}updating $(FILE)'s menus and nodes...$@{CLEAR@}\n"
+    @@emacs --batch --eval '(progn (find-file "./$(FILE).texi" nil) \
+      (texinfo-master-menu 1) (save-buffer 0))' 2> batch.log
+    @@printf "$@{GREEN@}done updating.$@{CLEAR@}\n"
 
+# Runs makeinfo on the TEXI file;
+# Opens the INFO file in Emacs
 INFO : info
 info : $(FILE).info
 $(FILE).info : $(FILE).texi
-    makeinfo $(FILE).texi
+    @@printf "$@{YELLOW@}Creating an INFO file...$@{CLEAR@}\n"
+    @@makeinfo $(FILE).texi
+    @@printf "$@{GREEN@}done$@{CLEAR@}\n"
 openinfo : INFO
-    emacs $(FILE).info
+    @@printf "$@{YELLOW@}Opening INFO in Emacs...$@{CLEAR@}\n"
+    @@emacsclient -s server --eval '(info "($(ROOT)/$(FILE).info)top")'
+    @@printf "$@{GREEN@}done$@{CLEAR@}\n"
 
+# Runs pdftexi2dvi on the TEXI file;
+# Opens the PDF file
 PDF : pdf
 pdf : $(FILE).pdf
 $(FILE).pdf : $(FILE).texi
-    pdftexi2dvi --build=tidy --build-dir=build --quiet $(FILE).texi
+    @@printf "$@{YELLOW@}Creating a PDF file...$@{CLEAR@}\n"
+    @@pdftexi2dvi --build=tidy --build-dir=build --quiet $(FILE).texi
+    @@printf "$@{GREEN@}done$@{CLEAR@}\n"
 openpdf : PDF
-    open $(FILE).pdf
+    @@printf "$@{YELLOW@}Opening PDF...$@{CLEAR@}\n"
+    @@open $(FILE).pdf
+    @@printf "$@{GREEN@}done$@{CLEAR@}\n"
 
+# Runs makeinfo --html on the TEXI file;
+# Opens index.html in a browser
 HTML : html
 html : $(FILE)/index.html
 $(FILE)/index.html : $(FILE).texi
-    makeinfo --html $(FILE).texi
+    @@printf "$@{YELLOW@}Creating an HTML directory...$@{CLEAR@}\n"
+    @@makeinfo --html $(FILE).texi
+    @@printf "$@{GREEN@}done$@{CLEAR@}\n"
 openhtml : HTML
-    open $(FILE)/index.html
+    @@printf "$@{YELLOW@}Opening INDEX.HTML in the browser...$@{CLEAR@}\n"
+    @@open $(FILE)/index.html
+    @@printf "$@{GREEN@}done$@{CLEAR@}\n"
 
 @end example
 @iftex
@@ -2420,29 +2719,18 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @c -----------------------------------------------------------------------------
 
-@node Makefile Clean Targets
+@node Makefile Clean Targets, Makefile Example Targets, Makefile TWJR Targets, The Makefile
 @appendixsec Makefile Clean Targets
 @cindex Makefile clean targets
 
-The @command{clean} target removes backup files.  The @command{dirclean} target
-removes  source  directories,  (e.g.,  @file{bin/}  and  and  @file{src/})  and
-associated  files and  programs  inside them.   The @command{distclean}  target
-removes  the  @file{HTML} directory  and  all  of its  files,  as  well as  the
-@file{PDF}  file.    Finally,  the  @command{worldclean}  target   removes  the
-@file{INFO} files, leaving the three files:
-
-@itemize
-@item
-@file{TWJR}
-@item
-@file{TEXI}
-@item
-@file{MAKEFILE}
-@end itemize
-
-The @file{TEXI} file is always left because  it will be accurate so long as the
-@file{TWJR} file is not modified, and  if the @file{TWJR} is modified, then the
-@file{TEXI} file will be resourced automatically.
+The @command{clean} target removes  backup files. The @command{dirclean} target
+removes build  directories and log  files, but  not source files  (those inside
+@file{files} directory,  e.g., @file{bin/} and and  @file{src/}) and associated
+files and  programs inside  them.  The  @command{distclean} target  removes the
+@acronym{INFO}, @acronym{PDF},  @acronym{HTML}, and @acronym{source}  files and
+directories, leaving just  the @file{TWJR} file, the @file{TEXI}  file, and the
+@file{Makefile}.  Finally,  the  @command{allclean} target  removes  everything
+except the @acronym{TWJR} file and the @file{Makefile}.
 
 @need 400
 @anchor{Makefile---Clean-Targets}
@@ -2450,29 +2738,39 @@ The @file{TEXI} file is always left because  it will be accurate so long as the
 @noindent
 @r{<@i{Makefile---Clean Targets}>} @equiv{}
 @example
-.PHONY : clean dirclean distclean worldclean
+.PHONY : clean dirclean distclean worldclean allclean
 
 # remove backup files
 clean :
-    rm -f *~ .*~ #*#
+    @@printf "$@{WHITEBOLD@}Cleaning...$@{CYAN@}\n"
+    @@rm -f *~ .*~ #*#
+    @@printf "$@{GREEN@}done cleaning.$@{CLEAR@}\n"
 
-# remove all directories; leave TexiwebJr, Texinfo files, Makefile
+# after clean: remove all build and miscellaneous files, leaving only
+# TWJR, TEXI, INFO, HTML, PDF, Makefile & the source documents.
 dirclean : clean
-    for file in *; do          \
+    @@printf "$@{WHITEBOLD@}Dir-cleaning...$@{CYAN@}\n"
+    @@for file in *; do         \
       case $$file in           \
         $(FILE)* | Makefile) ;;\
-        my-bib-macros*)      ;;\
+        $(FILES)*)       ;;\
+        $(LODESTONE))        ;;\
         *) rm -vfr $$file    ;;\
       esac                     \
     done
+    @@printf "$@{GREEN@}done dir-cleaning.$@{CLEAR@}\n"
 
-# after dirclean, remove HTML and PDF files
+# after dirclean: remove INFO, HTML, and PDF, and FILES
 distclean : dirclean
-    rm -vfr $(FILE) $(FILE).pdf
+    @@printf "$@{WHITEBOLD@}Dist-cleaning...$@{CYAN@}\n"
+    @@rm -vfr $(FILE) $(FILE).info $(FILE).pdf $(ROOT)/$(FILES)
+    @@printf "$@{GREEN@}done dist-cleaning.$@{CLEAR@}\n"
 
-# after distclean, remove INFO
-worldclean : distclean
-    rm -rfv $(FILE).info*
+# allclean: remove TEXI, leaving only TWJR and Makefile
+allclean : distclean
+    @@printf "$@{WHITEBOLD@}Cleaning all...$@{CYAN@}\n"
+    @@rm -vfr $(FILE).texi
+    @@printf "$@{GREEN@}done cleaning all.$@{CLEAR@}\n"
 
 @end example
 @iftex
@@ -2490,7 +2788,7 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @c -----------------------------------------------------------------------------
 
-@node Makefile Example Targets
+@node Makefile Example Targets, Makefile Applications, Makefile Clean Targets, The Makefile
 @appendixsec Makefile Example Targets
 @cindex makefile example targets
 
@@ -2521,11 +2819,44 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 
 
+@c -----------------------------------------------------------------------------
+
+@node Makefile Applications,  , Makefile Example Targets, The Makefile
+@appendixsec Makefile Applications
+@cindex Makefile applications
+
+Place any targets for running  code-specific commands here, such as executables
+in the @file{bin/} directory.  The file @verb{|@<Makefile---Applicaionts@>|} is
+a hook  that can  be used in  another part  of the source  document; this  is a
+fundamental feature of literate programming.
+
+@need 400
+@anchor{Makefile---Applications}
+@cdindex @r{<@i{Makefile---Applications}>}, definition
+@noindent
+@r{<@i{Makefile---Applications}>} @equiv{}
+@example
+
+@end example
+@iftex
+@smallfonts @rm
+@end iftex
+
+@noindent
+This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @ref{Makefile}.
+@iftex
+@textfonts @rm
+@end iftex
+
+
+
+
+
 
 
 
 @c *****************************************************************************
-@node Code Chunk Summaries
+@node Code Chunk Summaries, @mybibnode{}, The Makefile, Top
 @appendix Code Chunk Summaries
 
 This @value{APPENDIX} presents alphabetical lists of
@@ -2542,7 +2873,7 @@ and the code chunk references.
 
 
 @c -----------------------------------------------------------------------------
-@node File Definitions
+@node File Definitions, Code Chunk Definitions, Code Chunk Summaries, Code Chunk Summaries
 @appendixsec Source File Definitions
 
 @table @asis
@@ -2573,10 +2904,13 @@ This chunk is defined in
 
 
 @c -----------------------------------------------------------------------------
-@node Code Chunk Definitions
+@node Code Chunk Definitions, Code Chunk References, File Definitions, Code Chunk Summaries
 @appendixsec Code Chunk Definitions
 
 @table @asis
+@item @r{<@i{Makefile---Applications}>}
+This chunk is defined in
+@ref{Makefile---Applications}.
 @item @r{<@i{Makefile---Clean Targets}>}
 This chunk is defined in
 @ref{Makefile---Clean-Targets}.
@@ -2602,10 +2936,14 @@ This chunk is defined in
 
 
 @c -----------------------------------------------------------------------------
-@node Code Chunk References
+@node Code Chunk References,  , Code Chunk Definitions, Code Chunk Summaries
 @appendixsec Code Chunk References
 
 @table @asis
+@item @r{<@i{Makefile---Applications}>}
+
+@noindent
+This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @ref{Makefile}.
 @item @r{<@i{Makefile---Clean Targets}>}
 
 @noindent
@@ -2635,10 +2973,17 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 
 @c *****************************************************************************
-@node Bibliography
+@c                                BIBLIOGRAPHY
+
+@node @mybibnode{}, List of Tables, Code Chunk Summaries, Top
 @unnumbered Bibliography
 
+@table @asis
 
+@mybibitem{Nada}
+Nothing
+
+@end table
 
 
 
@@ -2647,7 +2992,7 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 @c *****************************************************************************
 
-@node List of Tables
+@node List of Tables, Concept Index, @mybibnode{}, Top
 @unnumbered List of Tables
 
 @listoffloats Table
@@ -2660,7 +3005,7 @@ This chunk is called by @r{@{@file{Makefile}@}}; see its first definition at @re
 
 
 @c  *****************************************************************************
-@node Concept Index
+@node Concept Index,  , List of Tables, Top
 @unnumbered Index
 
 @printindex cp
